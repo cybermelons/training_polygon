@@ -9,3 +9,5 @@ panorama_debugger.cfg
 *.vjs_c
 *.vxml_c
 nul
+.claude/
+CLAUDE.md
