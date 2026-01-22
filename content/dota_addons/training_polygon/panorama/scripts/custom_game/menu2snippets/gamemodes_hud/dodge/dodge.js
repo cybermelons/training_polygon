@@ -27,51 +27,59 @@ function drawTypes(){
 	for (let type in spells_to_pick){
 		drawType(typesPanel,type)
 	}
-	
-	
+
+
 }
 function clearSpellTable(){
 	$.Each($('#dodgeSpellContainer').Children(), function( oPanel )
 	{
 		oPanel.DeleteAsync(0)
 	});
-	
+
 }
 function drawSpellTable(typeToDraw){
 	clearSpellTable()
 	$.Msg('drawing spell table')
-	
+
 	for (let type in spells_to_pick){
-		
-		/* $.Msg(type) */
 		if (type==typeToDraw){
-			for (let skill in spells_to_pick[type]){
-				let skill_info=spells_to_pick[type][skill]
-				$.Msg(skill)
-				let skill_name=skill
-				drawSkill($('#dodgeSpellContainer'),skill_name)
+			for (let key in spells_to_pick[type]){
+				let skill_info = spells_to_pick[type][key]
+				// key is the numeric index, skill_info contains spell_name, hero_name, etc.
+				drawSkill($('#dodgeSpellContainer'), key, skill_info)
 			}
 		}
-		
-		//
 	}
 }
 //$('#mantaThumb').ClearPanelEvent("onmouseover")
 //$('#dtype_0').checked=true
-function drawSkill(parent,name){
-	/* $.Msg(name) */
-	var container=$.CreatePanel('ToggleButton', parent, 'skillC_' + name)
+function drawSkill(parent, key, skillInfo){
+	// key is the numeric index from Lua table
+	// skillInfo format: {spell_name, hero_name, level, aghs, shard, is_ability}
+	var container = $.CreatePanel('ToggleButton', parent, 'skillC_' + key)
 	container.AddClass('timingType')
-	let SkillImage = $.CreatePanel('DOTAAbilityImage', container, 'skillI_' + name)
-	SkillImage.abilityname = name
+
+	let spellName = skillInfo.spell_name || ""
+
+	// Store the key and skill info as panel attributes
+	container.SetAttributeInt("key", parseInt(key))
+	container.SetAttributeString("spell_name", spellName)
+	container.SetAttributeString("hero_name", skillInfo.hero_name || "")
+	container.SetAttributeInt("level", skillInfo.level || 1)
+	container.SetAttributeInt("aghs", skillInfo.aghs ? 1 : 0)
+	container.SetAttributeInt("shard", skillInfo.shard ? 1 : 0)
+	container.SetAttributeInt("is_ability", skillInfo.is_ability ? 1 : 0)
+
+	let SkillImage = $.CreatePanel('DOTAAbilityImage', container, 'skillI_' + key)
+	SkillImage.abilityname = spellName
 	container.SetPanelEvent(
-		"onmouseover", 
+		"onmouseover",
 		function() {
-			$.DispatchEvent("DOTAShowAbilityTooltip", container, name);
+			$.DispatchEvent("DOTAShowAbilityTooltip", container, spellName);
 		}
 	)
 	container.SetPanelEvent(
-		"onmouseout", 
+		"onmouseout",
 		function() {
 			$.DispatchEvent("DOTAHideAbilityTooltip", container);
 		}
@@ -87,7 +95,7 @@ function drawType(parent,name){
 	modePanel.SetAttributeString("name",name)
 	modePanel.BLoadLayout("file://{resources}/layout/custom_game/menu2snippets/gamemodes_hud/dodge/dodge_type.xml", false, false)
 	modePanel.SetPanelEvent(
-		"onactivate", 
+		"onactivate",
 		function() {
 			drawSpellTable(name)
 		}
@@ -119,16 +127,16 @@ function startGame() {
         return;
     }
 
-    if (selected.length === 0) {
+    if (Object.keys(selected).length === 0) {
         errorMsg.text='Error: No skills selected.';
         return;
     }
 
     $.Msg(dodgeName);
-    $.Msg(selected);
+    $.Msg(JSON.stringify(selected));
 
-    GameEvents.SendCustomGameEventToServer("activate_game_mode", 
-		{ 	
+    GameEvents.SendCustomGameEventToServer("activate_game_mode",
+		{
 			gameModeName: "dodge",
 			dodgeName: dodgeName,
 			dodgeSpells: selected
@@ -146,15 +154,24 @@ function getDodgeType(){
 	return dodgeName
 }
 function getSelectedSkills() {
-    let selectedSkills = [];
+    let selectedSkills = {};
     let skillContainer = $('#dodgeSpellContainer');
-    
+
     $.Each(skillContainer.Children(), function(oPanel) {
         if (oPanel.checked) {
-            selectedSkills.push(oPanel.id.replace('skillC_', ''));
+            // Use the numeric key to identify the spell entry
+            let key = oPanel.GetAttributeInt("key", 0);
+            selectedSkills[key] = {
+                spell_name: oPanel.GetAttributeString("spell_name", ""),
+                hero_name: oPanel.GetAttributeString("hero_name", ""),
+                level: oPanel.GetAttributeInt("level", 1),
+                aghs: oPanel.GetAttributeInt("aghs", 0) === 1,
+                shard: oPanel.GetAttributeInt("shard", 0) === 1,
+                is_ability: oPanel.GetAttributeInt("is_ability", 1) === 1
+            };
         }
     });
-    
+
     return selectedSkills;
 }
 // Precache progress is now handled by precache_modal.js

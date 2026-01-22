@@ -1,0 +1,95 @@
+.TimebarRoot {
+	width: 100%;
+	height: 100%;
+}
+
+.TimebarContainer {
+    width: 400px;  /* Changed from fit-children */
+    height: 150px; /* Changed from fit-children */
+    min-width: 400px;
+    min-height: 150px;
+    background-color: #000000CC;
+    border-radius: 4px;
+    /* flow-children: down; */
+    box-shadow: 2px 2px 8px 2px #00000088;
+    transition-property: opacity;
+    transition-duration: 0.2s;
+	z-index: 100;
+}
+.ResizeAnchor{
+	width: 15px;
+	height: 15px;
+	background-color: #333;
+	vertical-align: bottom;
+	horizontal-align: right;
+	clip: radial( 50% 50%, 45deg, 180deg );
+}
+.ResizeAnchor:hover{
+	background-color: #fff;
+}
+.LockButton{
+	width: 20px;
+	height: 20px;
+	opacity-mask: url("file://{images}/custom_game/lock-icon.png");
+	opacity-mask-scale: 100%;
+	vertical-align: top;
+	horizontal-align: right;
+	margin-right: 5px;
+	margin-top: 5px;
+	background-color: #333;
+	
+}
+.Locked{
+	background-color: #fff;
+}
+.LockButton:hover{
+	background-color: #fff;
+}
+.TimerContent{
+	flow-children: down;
+}
+.UpperSpace{
+    height: 33.333%;
+    width: 100%;
+	/* background-color: #ddd; */
+}
+.MiddleSpace{
+    height: 33.333%;
+    width: 100%;
+	/* background-color: #1e7bf5; */
+}
+.BottomSpace {
+    height: 33.333%;
+    width: 100%;
+	/* background-color: #b60000; */
+}
+.TimerContent{
+	width: 100%;
+	height: 100%;
+}
+.InfoPanel{
+	width: 80%;
+	height: 100%;
+	horizontal-align: center;
+	vertical-align: center;
+}
+.TimeLabel{
+	color: white;
+	font-size: 100px;
+	width: 100%;
+	height: 80%;
+	text-overflow: shrink;
+	text-align: center;
+	vertical-align: center;
+}
+.DynamicBarContainer{
+	height: 60%;
+	vertical-align: center;
+	background-color: #676767;
+	width: 100%;
+}
+.DynamicBar{
+	background-color: white;
+	height: 100%;
+	
+}

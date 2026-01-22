@@ -3,6 +3,7 @@
 
   <Panel>
     <CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/precache_modal.xml" />
+    <CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/dynamic_hud_loader.xml" />
     <CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/mainmenu.xml" />
     <CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/manta.xml" />
     <CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/eul.xml" />
@@ -11,7 +12,7 @@
     <CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/mainmenu_v2.xml" />
     <CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/action_logging.xml" /> 
     <CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/ping_reader.xml" />
-    
+    <CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/timebar.xml" />
     <!-- <CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/xml_compiler.xml" /> --> 
   </Panel>
 </root>

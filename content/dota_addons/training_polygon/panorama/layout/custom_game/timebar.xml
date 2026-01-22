@@ -1,0 +1,32 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/timebar.css" />
+	</styles>
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/timebar.js" />
+	</scripts>
+	<Panel class="TimebarRoot" hittest="false">
+		<Panel class="TimebarContainer" id="TimebarContainer">
+			<!-- <Panel class="LockButton" id="LockButton"/> -->
+			<!-- <Panel class="ResizeAnchor" id="ResizeAnchor"/> -->
+			<Panel class="TimerContent" id="TimerContent">
+				<Panel class="UpperSpace" id="UpperSpace">
+					<Panel class="LockButton" id="LockButton"/>
+					<Panel class="InfoPanel" id="InfoPanel">
+						<Label class="TimeLabel" text="0.000" id="TimeLabel"/>
+					</Panel>
+				</Panel>
+				<Panel class="MiddleSpace" id="MiddleSpace">
+					<Panel class="DynamicBarContainer" id="DynamicBarContainer">
+						<Panel class="DynamicBar" id="DynamicBar"/>
+					</Panel>
+				</Panel>
+				<Panel class="BottomSpace" id="BottomSpace">
+					<Panel class="ResizeAnchor" id="ResizeAnchor"/>
+					
+				</Panel>
+			</Panel>
+		</Panel>
+		
+	</Panel>
+</root>

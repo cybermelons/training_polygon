@@ -4422,34 +4422,7 @@ function getAbilityCastpoint(ability_name,unit)
 
 end
 
-function parseQuadroValue(data,level)
-	--print('parser input:',data,level)
-	local value_count
-	if level==nil then
-		value_count=1
-	else
-		value_count=level
-	end
-	local res_table={}
-	local result
-	local start=1
-	for i=1,string.len(data) do
-		local symbol=string.sub(data,i,i)
-		if symbol==" " then
-			--print('trying to insert:',string.sub(data,start,i-1))
-			table.insert(res_table,tonumber(string.sub(data,start,i-1)))
-			start=i+1
-		end
-		
-	end
-	table.insert(res_table,tonumber(string.sub(data,start,string.len(data))))
-	DeepPrintTable(res_table)
-	if value_count=='all' then
-		return res_table
-	else
-		return res_table[value_count]
-	end
-end
+
 
 function timingAutocastAI(unit,ability,delay,targetUnit)
 	local target_type=getTargetType(ability)

@@ -1,3 +1,8 @@
+--i was trying to remake dodge gamemode, goal was:
+--1) make a separate spell tables for every type of dodge
+--2) add enemy autoattacks for practicing
+--3) make spelltable to be declared only in lua code, not both lua and js, so it would be easy to modify
+
 if dodge == nil then
   dodge = class({})
 end
@@ -254,7 +259,7 @@ function dodge:castSpellOnHero(casterUnitName, abilityName)
 end
 
 -- Function to cast an ability with given parameters
-function CastAbility(unit, abilityName, targetHero, level)
+function CastAbility(unit, abilityName, targetUnit, level)
   local ability=unit:FindAbilityByName(abilityName) -- Find ability on unit
   local ability_kv = DotaDB:GetAbilityKV(abilityName) -- Get ability key-values
   if not ability_kv or not ability_kv["AbilityBehavior"] then
@@ -273,14 +278,14 @@ function CastAbility(unit, abilityName, targetHero, level)
       UnitIndex = unit:entindex(),
       OrderType = DOTA_UNIT_ORDER_CAST_TARGET,
       AbilityIndex = ability:entindex(),
-      TargetIndex = hero:entindex(),
+      TargetIndex = targetUnit:entindex(),
       Queue = 1
     })
   elseif behavior:find("DOTA_ABILITY_BEHAVIOR_POINT") then
     ExecuteOrderFromTable({
       UnitIndex = unit:entindex(),
       OrderType = DOTA_UNIT_ORDER_CAST_POSITION,
-      Position = targetHero:GetOrigin(),
+      Position = targetUnit:GetOrigin(),
       AbilityIndex = ability:entindex(),
       Queue = 1
     })

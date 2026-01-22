@@ -10,6 +10,10 @@ let avg_ping=0
 let init_run=1
 startCountingPing()
 function startCountingPing(){
+	if (Game.IsInToolsMode()){
+		$.Msg('game is in tools, stop counting ping')
+		return
+	}
 	//$.Msg('ping from ui:')
 	//$.Msg(ping_label.text)//ADD MIN MAX AND SHOW AVG
 	let pingFromUI=ping_label.text
