@@ -13,11 +13,11 @@ function dodge:Init()
         [1]={spell_name="lina_light_strike_array", hero_name="npc_dota_hero_lina", level=1, aghs=false, shard=false, is_ability=true, cast_func="lina_light_strike_array"},
         [2]={spell_name="kunkka_ghostship", hero_name="npc_dota_hero_kunkka", level=1, aghs=false, shard=false, is_ability=true, cast_func="kunkka_ghostship"},
         [3]={spell_name="lina_laguna_blade", hero_name="npc_dota_hero_lina", level=1, aghs=false, shard=false, is_ability=true, cast_func="lina_laguna_blade"},
-        [4]={spell_name="bloodseeker_blood_bath", hero_name="npc_dota_hero_bloodseeker", level=1, aghs=false, shard=false, is_ability=true, cast_func="basic_point_cast"},
-        [5]={spell_name="pugna_nether_blast", hero_name="npc_dota_hero_pugna", level=1, aghs=false, shard=false, is_ability=true, cast_func="universal_cast"},
-        [6]={spell_name="meepo_poof", hero_name="npc_dota_hero_meepo", level=1, aghs=false, shard=false, is_ability=true, cast_func="universal_cast"},
-        [7]={spell_name="necrolyte_death_pulse", hero_name="npc_dota_hero_necrolyte", level=1, aghs=false, shard=false, is_ability=true, cast_func="universal_cast"},
-        [8]={spell_name="mirana_starfall", hero_name="npc_dota_hero_mirana", level=1, aghs=false, shard=false, is_ability=true, cast_func="universal_cast"},
+        [4]={spell_name="bloodseeker_blood_bath", hero_name="npc_dota_hero_bloodseeker", level=1, aghs=false, shard=false, is_ability=true, cast_func="bloodseeker_blood_bath"},
+        [5]={spell_name="pugna_nether_blast", hero_name="npc_dota_hero_pugna", level=1, aghs=false, shard=false, is_ability=true, cast_func="pugna_nether_blast"},
+        [6]={spell_name="meepo_poof", hero_name="npc_dota_hero_meepo", level=1, aghs=false, shard=false, is_ability=true, cast_func="meepo_poof"},
+        [7]={spell_name="necrolyte_death_pulse", hero_name="npc_dota_hero_necrolyte", level=1, aghs=false, shard=false, is_ability=true, cast_func="necrolyte_death_pulse"},
+        --[[ [8]={spell_name="mirana_starfall", hero_name="npc_dota_hero_mirana", level=1, aghs=false, shard=false, is_ability=true, cast_func="mirana_starfall"}, --not dodgable with manta, may be added to other tables]]
         [9]={spell_name="nevermore_shadowraze2", hero_name="npc_dota_hero_nevermore", level=1, aghs=false, shard=false, is_ability=true, cast_func="universal_cast"},
         [10]={spell_name="zuus_lightning_bolt", hero_name="npc_dota_hero_zuus", level=1, aghs=false, shard=false, is_ability=true, cast_func="universal_cast"},
         [11]={spell_name="zuus_thundergods_wrath", hero_name="npc_dota_hero_zuus", level=1, aghs=false, shard=false, is_ability=true, cast_func="universal_cast"},
@@ -163,6 +163,10 @@ function dodge:Init()
     self.debugTime=0
     self.currentAbilityName=""
     self.deactivateCalled=false
+    self.hardcoreMode=false
+    self.fakeCastModeOn=false--planned to make bots cancel cast animations 0-3 times randomly, but complicated thing to do, i will never finish refactoring if i go into that
+    self.respawnOffset=50
+    self.blinkRange=1000
 end
 
 function dodge:Prepare(args)
@@ -241,24 +245,94 @@ function dodge:lina_light_strike_array(entry)
     local abilityKV = DotaDB:GetAbilityKV(abilityName)
     local castPoint=parseQuadroValue(abilityKV["AbilityCastPoint"])
     local damageDelay=parseQuadroValue(abilityKV["AbilityValues"]["light_strike_array_delay_time"])
+    local range=parseQuadroValue(abilityKV["AbilityCastRange"])
     if self.yashaKaya then
         castPoint=castPoint*self.yashaKayaModifier
     end
     castPoint=castPoint+damageDelay
     Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
-    self:doPointCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint)
+    self:doPointCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint,range)
+end
+function dodge:bloodseeker_blood_bath(entry)
+    local abilityName=entry.spell_name
+    local abilityKV = DotaDB:GetAbilityKV(abilityName)
+    local castPoint=parseQuadroValue(abilityKV["AbilityCastPoint"])
+    local damageDelay=parseQuadroValue(abilityKV["AbilityValues"]["delay"])
+    local range=parseQuadroValue(abilityKV["AbilityCastRange"])
+    if self.yashaKaya then
+        castPoint=castPoint*self.yashaKayaModifier
+    end
+    castPoint=castPoint+damageDelay
+    Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
+    self:doPointCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint,range)
+end
+function dodge:pugna_nether_blast(entry)
+    local abilityName=entry.spell_name
+    local abilityKV = DotaDB:GetAbilityKV(abilityName)
+    local castPoint=parseQuadroValue(abilityKV["AbilityCastPoint"])
+    local damageDelay=parseQuadroValue(abilityKV["AbilityValues"]["delay"])
+    local range=parseQuadroValue(abilityKV["AbilityCastRange"])
+    if self.yashaKaya then
+        castPoint=castPoint*self.yashaKayaModifier
+    end
+    castPoint=castPoint+damageDelay
+    Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
+    self:doPointCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint,range)
+end
+function dodge:meepo_poof(entry)
+    local abilityName=entry.spell_name
+    local abilityKV = DotaDB:GetAbilityKV(abilityName)
+    local castPoint=parseQuadroValue(abilityKV["AbilityCastPoint"])
+    local damageDelay=0
+    local range=parseQuadroValue(abilityKV["AbilityValues"]["radius"]["value"])
+    if self.yashaKaya then
+        castPoint=castPoint*self.yashaKayaModifier
+    end
+    castPoint=castPoint+damageDelay
+    Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
+    self:doPointCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint,range)
+end
+function dodge:necrolyte_death_pulse(entry)
+    local abilityName=entry.spell_name
+    local abilityKV = DotaDB:GetAbilityKV(abilityName)
+    local castPoint=parseQuadroValue(abilityKV["AbilityCastPoint"])
+    local projectileSpeed=parseQuadroValue(abilityKV["AbilityValues"]["projectile_speed"])
+
+    
+    local range=parseQuadroValue(abilityKV["AbilityValues"]["area_of_effect"]["value"])
+    local damageDelay=(range-self.respawnOffset-50)/projectileSpeed--50 is hull sizes i guess
+    if self.yashaKaya then
+        castPoint=castPoint*self.yashaKayaModifier
+    end
+    castPoint=castPoint+damageDelay
+    Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
+    self:doNoTargetCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint,range)
 end
 function dodge:lina_laguna_blade(entry)
     local abilityName=entry.spell_name
     local abilityKV = DotaDB:GetAbilityKV(abilityName)
     local castPoint=parseQuadroValue(abilityKV["AbilityCastPoint"])
     local damageDelay=parseQuadroValue(abilityKV["AbilityValues"]["damage_delay"])
+    local range=parseQuadroValue(abilityKV["AbilityCastRange"])
     if self.yashaKaya then
         castPoint=castPoint*self.yashaKayaModifier
     end
     castPoint=castPoint+damageDelay
     Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
-    self:doTargetCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint)
+    self:doTargetCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint,range)
+end
+function dodge:mirana_starfall(entry)
+    local abilityName=entry.spell_name
+    local abilityKV = DotaDB:GetAbilityKV(abilityName)
+    local castPoint=parseQuadroValue(abilityKV["AbilityCastPoint"])
+    local damageDelay=0.57
+    local range=parseQuadroValue(abilityKV["AbilityValues"]["starfall_radius"]["value"])
+    if self.yashaKaya then
+        castPoint=castPoint*self.yashaKayaModifier
+    end
+    castPoint=castPoint+damageDelay
+    Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
+    self:doNoTargetCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint,range)
 end
 function dodge:kunkka_ghostship(entry)
     local abilityName=entry.spell_name
@@ -266,29 +340,49 @@ function dodge:kunkka_ghostship(entry)
     local castPoint=parseQuadroValue(abilityKV["AbilityCastPoint"])
     local travel_distance=parseQuadroValue(abilityKV["AbilityValues"]["ghostship_distance"])
     local travel_speed=parseQuadroValue(abilityKV["AbilityValues"]["ghostship_speed"])
+    local range=parseQuadroValue(abilityKV["AbilityCastRange"])
     local damageDelay=travel_distance/travel_speed
     if self.yashaKaya then
         castPoint=castPoint*self.yashaKayaModifier
     end
     castPoint=castPoint+damageDelay
     Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
-    self:doPointCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint)
+    self:doPointCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint,range)
 end
 function dodge:doTargetCast(enemyName,enemySpell,preCastDelay,afterCastDelay,spawnRange)
     --[[ print('do target cast:',enemyName,enemySpell) ]]
-    local spawnpoint=randomCirclePositionVector(400,self.playerHero:GetAbsOrigin())
+    if self.hardcoreMode then
+        spawnRange=spawnRange+self.blinkRange
+    end
+    local spawnpoint=randomCirclePositionVector(spawnRange-self.respawnOffset,self.playerHero:GetAbsOrigin())
+    
     self.currentEnemy=CreateUnitByNameAsync(enemyName,spawnpoint,true,nil,nil,DOTA_TEAM_BADGUYS,function(unit)
         unit:SetForwardVector((self.playerHero:GetAbsOrigin() - spawnpoint):Normalized())
 		
 		local ability = unit:FindAbilityByName(enemySpell)
 		unit:SetAttackCapability(0)
 		unit:UpgradeAbility(ability)
-        
+         local blink=nil
+        if self.hardcoreMode then
+            blink=CreateItem("item_blink",unit,unit)
+            unit:AddItem(blink)
+        end
         local delay=preCastDelay+self:getRandomDelay()
-        
+        local blinkCasted=false
         function tryToCast()
             unit:SetContextThink(DoUniqueString("try_cast_ability"),
                 function()
+                    if self.hardcoreMode and blinkCasted==false then
+                        local blinkPoint=(self.playerHero:GetAbsOrigin() - spawnpoint):Normalized()*self.blinkRange
+                        ExecuteOrderFromTable({
+                            UnitIndex = unit:entindex(),
+                            OrderType = DOTA_UNIT_ORDER_CAST_POSITION,
+                            AbilityIndex = blink:entindex(),
+                            Position = self.playerHero:GetAbsOrigin(),
+                            Queue = 0
+                        })
+                        blinkCasted=true
+                    end
                     --[[ print(self.playerHero:HasModifier(self.dodgeModifier),self.dodgeModifier) ]]
                     if ability:IsCooldownReady() and unit:GetSequence()=="idle_anim" and self.playerHero:IsUnselectable()==false then
                         --[[ print('trying to cast') ]]
@@ -297,8 +391,88 @@ function dodge:doTargetCast(enemyName,enemySpell,preCastDelay,afterCastDelay,spa
                             OrderType = DOTA_UNIT_ORDER_CAST_TARGET,
                             AbilityIndex = ability:entindex(),
                             TargetIndex = self.playerHero:entindex(),
+                            Queue = 1
+                        })
+                    end
+                    delay=0.15
+                    if ability:IsCooldownReady()==false then
+                        --go to unit removal
+                        self.removeTimer=Timers:CreateTimer(afterCastDelay, function()
+                            if IsValidEntity(unit) then
+                                unit:RemoveSelf()
+                            end
+                            self:cycleEnemies()
+                            return nil
+                        end) 
+                    else
+                        tryToCast()
+                    end
+
+                    
+                end,
+            delay)
+        end
+        tryToCast()
+        self.currentEnemy=unit
+        return unit
+    end)
+end
+function dodge:doCast(enemyName,enemySpell,preCastDelay,afterCastDelay,spawnRange,abilityType)-- tried to make a universal method, but dont work properly with kunkka ghosthip, so maybe someone will finish it
+    --[[ print('do target cast:',enemyName,enemySpell) ]]
+    if self.hardcoreMode then
+        spawnRange=spawnRange+self.blinkRange
+    end
+    local spawnpoint=randomCirclePositionVector(spawnRange-self.respawnOffset,self.playerHero:GetAbsOrigin())
+    
+    self.currentEnemy=CreateUnitByNameAsync(enemyName,spawnpoint,true,nil,nil,DOTA_TEAM_BADGUYS,function(unit)
+        unit:SetForwardVector((self.playerHero:GetAbsOrigin() - spawnpoint):Normalized())
+		
+		local ability = unit:FindAbilityByName(enemySpell)
+		unit:SetAttackCapability(0)
+		unit:UpgradeAbility(ability)
+         local blink=nil
+        if self.hardcoreMode then
+            blink=CreateItem("item_blink",unit,unit)
+            unit:AddItem(blink)
+        end
+        local delay=preCastDelay+self:getRandomDelay()
+        local blinkCasted=false
+        function tryToCast()
+            unit:SetContextThink(DoUniqueString("try_cast_ability"),
+                function()
+                    if self.hardcoreMode and blinkCasted==false then
+                        local blinkPoint=(self.playerHero:GetAbsOrigin() - spawnpoint):Normalized()*self.blinkRange
+                        ExecuteOrderFromTable({
+                            UnitIndex = unit:entindex(),
+                            OrderType = DOTA_UNIT_ORDER_CAST_POSITION,
+                            AbilityIndex = blink:entindex(),
+                            Position = self.playerHero:GetAbsOrigin(),
                             Queue = 0
                         })
+                        blinkCasted=true
+                    end
+                    --[[ print(self.playerHero:HasModifier(self.dodgeModifier),self.dodgeModifier) ]]
+                    if ability:IsCooldownReady() and unit:GetSequence()=="idle_anim" and self.playerHero:IsUnselectable()==false then
+                        --[[ print('trying to cast') ]]
+                        if abilityType=="target" then
+                            ExecuteOrderFromTable({
+                                UnitIndex = unit:entindex(),
+                                OrderType = DOTA_UNIT_ORDER_CAST_TARGET,
+                                AbilityIndex = ability:entindex(),
+                                TargetIndex = self.playerHero:entindex(),
+                                Queue = 1
+                            })
+                        elseif abilityType=="point" then
+                            ExecuteOrderFromTable({
+                                UnitIndex = unit:entindex(),
+                                OrderType = DOTA_UNIT_ORDER_CAST_POSITION,
+                                AbilityIndex = ability:entindex(),
+                                Position = self.playerHero:GetAbsOrigin(),
+                                Queue = 1
+                            })
+                        elseif abilityType=="notarget" then
+
+                        end
                     end
                     delay=0.15
                     if ability:IsCooldownReady()==false then
@@ -325,24 +499,42 @@ function dodge:doTargetCast(enemyName,enemySpell,preCastDelay,afterCastDelay,spa
 end
 function dodge:doPointCast(enemyName,enemySpell,preCastDelay,afterCastDelay,spawnRange)
     --[[ print('do point cast called:',enemyName,enemySpell) ]]
-    local spawnpoint=randomCirclePositionVector(400,self.playerHero:GetAbsOrigin())
+    if self.hardcoreMode then
+        spawnRange=spawnRange+self.blinkRange
+    end
+    local spawnpoint=randomCirclePositionVector(spawnRange-self.respawnOffset,self.playerHero:GetAbsOrigin())
     self.currentEnemy=CreateUnitByNameAsync(enemyName,spawnpoint,true,nil,nil,DOTA_TEAM_BADGUYS,function(unit)
         unit:SetForwardVector((self.playerHero:GetAbsOrigin() - spawnpoint):Normalized())
 		local ability = unit:FindAbilityByName(enemySpell)
 		unit:SetAttackCapability(0)
 		unit:UpgradeAbility(ability)
+        local blink=nil
+        if self.hardcoreMode then
+            blink=CreateItem("item_blink",unit,unit)
+            unit:AddItem(blink)
+        end
         if self.yashaKaya then
             local yashaKaya=CreateItem("item_yasha_and_kaya",unit,unit)
             unit:AddItem(yashaKaya)
         end
         unit:SetContextThink(DoUniqueString("cast_ability"),
             function()
+                if self.hardcoreMode then
+                    local blinkPoint=(self.playerHero:GetAbsOrigin() - spawnpoint):Normalized()*self.blinkRange
+                    ExecuteOrderFromTable({
+                        UnitIndex = unit:entindex(),
+                        OrderType = DOTA_UNIT_ORDER_CAST_POSITION,
+                        AbilityIndex = blink:entindex(),
+                        Position = self.playerHero:GetAbsOrigin(),
+                        Queue = 0
+                    })
+                end
                 ExecuteOrderFromTable({
                     UnitIndex = unit:entindex(),
                     OrderType = DOTA_UNIT_ORDER_CAST_POSITION,
                     AbilityIndex = ability:entindex(),
                     Position = self.playerHero:GetAbsOrigin(),
-                    Queue = 0
+                    Queue = 1
                 })
                 self.removeTimer=Timers:CreateTimer(afterCastDelay, function()
 					if IsValidEntity(unit) then
@@ -358,7 +550,58 @@ function dodge:doPointCast(enemyName,enemySpell,preCastDelay,afterCastDelay,spaw
         return unit
     end)
 end
-
+function dodge:doNoTargetCast(enemyName,enemySpell,preCastDelay,afterCastDelay,spawnRange)
+    --[[ print('do point cast called:',enemyName,enemySpell) ]]
+    if self.hardcoreMode then
+        spawnRange=spawnRange+self.blinkRange
+    end
+    local spawnpoint=randomCirclePositionVector(spawnRange-self.respawnOffset,self.playerHero:GetAbsOrigin())
+    self.currentEnemy=CreateUnitByNameAsync(enemyName,spawnpoint,true,nil,nil,DOTA_TEAM_BADGUYS,function(unit)
+        unit:SetForwardVector((self.playerHero:GetAbsOrigin() - spawnpoint):Normalized())
+		local ability = unit:FindAbilityByName(enemySpell)
+		unit:SetAttackCapability(0)
+		unit:UpgradeAbility(ability)
+        local blink=nil
+        if self.hardcoreMode then
+            blink=CreateItem("item_blink",unit,unit)
+            unit:AddItem(blink)
+        end
+        if self.yashaKaya then
+            local yashaKaya=CreateItem("item_yasha_and_kaya",unit,unit)
+            unit:AddItem(yashaKaya)
+        end
+        unit:SetContextThink(DoUniqueString("cast_ability"),
+            function()
+                if self.hardcoreMode then
+                    local blinkPoint=(self.playerHero:GetAbsOrigin() - spawnpoint):Normalized()*self.blinkRange
+                    ExecuteOrderFromTable({
+                        UnitIndex = unit:entindex(),
+                        OrderType = DOTA_UNIT_ORDER_CAST_POSITION,
+                        AbilityIndex = blink:entindex(),
+                        Position = self.playerHero:GetAbsOrigin(),
+                        Queue = 0
+                    })
+                end
+                ExecuteOrderFromTable({
+                    UnitIndex = unit:entindex(),
+                    OrderType = DOTA_UNIT_ORDER_CAST_NO_TARGET,
+                    AbilityIndex = ability:entindex(),
+                    Queue = 1
+                })
+                self.removeTimer=Timers:CreateTimer(afterCastDelay, function()
+					if IsValidEntity(unit) then
+                        unit:RemoveSelf()
+                    end
+                    self:cycleEnemies()
+					return nil
+				end)
+                
+            end,
+        preCastDelay+self:getRandomDelay())
+        self.currentEnemy=unit
+        return unit
+    end)
+end
 function dodge:getRandomDelay()
     local randomDelay=RandomFloat(0,0.5)
     return randomDelay
@@ -374,32 +617,40 @@ function dodge:StartGame(args)
     else
         self.yashaKaya=false
     end
+    self.yashaKayaPlayer=false
     if args['yashaKayaPlayer']==1 then
         self.yashaKayaPlayer=true
     else
         self.yashaKayaPlayer=false
     end
+    self.hardcoreMode=false
+    if args['hardcoreMode']==1 then
+        self.hardcoreMode=true
+    else
+        self.hardcoreMode=false
+    end
     
     CustomGameEventManager:Send_ServerToAllClients("load_hud",{name=self.name})
-    Timebar:Show()
+    
     self.currentDodgeType=args['dodgeName']
     self.Player=PlayerResource:GetPlayer(0)
     local old_hero=self.Player:GetAssignedHero()
     local new_hero=self.unitTable[self.currentDodgeType]
+    
     self.playerHero=replaceHero(old_hero,new_hero)
     self.playerHero:SetBaseHealthRegen(300)
     self.playerHero:SetBaseManaRegen(300)
-    if self.currentDodgeType=="storm_spirit_ball_lightning" then
-        
+    if self.hardcoreMode then
+        self.playerHero:SetDayTimeVisionRange(675)
+    else
+        Timebar:Show()
+    end
+    if self.currentDodgeType=="storm_spirit_ball_lightning" then 
         self.playerHero:AddNewModifier(self.playerHero, nil, "modifier_custom_speed_boost", {})
-        
-        
+
     else
         self.playerHero:SetMoveCapability(0)
-        
     end
-    
-    
     self.playerHero:SetAttackCapability(0)
     if self.currentDodgeType=="item_manta" then
         self.mantaEnt=CreateItem("item_manta",self.playerHero,self.playerHero)
@@ -409,6 +660,10 @@ function dodge:StartGame(args)
         self.dodgeAbilityEnt=self.playerHero:FindAbilityByName(self.currentDodgeType)
         self.playerHero:UpgradeAbility(self.dodgeAbilityEnt)
         
+    end
+    if self.yashaKayaPlayer then
+        local yashaKaya=CreateItem("item_yasha_and_kaya",self.playerHero,self.playerHero)
+        self.playerHero:AddItem(yashaKaya)
     end
     self.stormFlyTime=tonumber(args['stormTime'])
     self.spellIndex=1
@@ -424,6 +679,9 @@ function dodge:StartGame(args)
     self.playerGotHurt=false
     self.timebarTiming=self.dodgeWindowTime[self.currentDodgeType]
     self.dodgeCastPoint=self.dodgeCastPointTable[self.currentDodgeType]
+    if self.yashaKayaPlayer then
+        self.dodgeCastPoint=self.dodgeCastPoint*self.yashaKayaModifier
+    end
     if self.currentDodgeType=="storm_spirit_ball_lightning" then
         self.timebarTiming=self.stormFlyTime
     end
@@ -472,6 +730,7 @@ function dodge:checkResult()
         --bad result
         if self.dodgePressed then
             local delay=self.playerDodgeTime-self.playerHurtTime
+            delay=math.floor(delay*1000)/1000
             Notifications:Show('red','bad, delay:'..delay,self.currentAbilityName)
         else
             Notifications:Show('red','bad',self.currentAbilityName)
@@ -627,7 +886,8 @@ end
 
 function dodge:Deactivate()
     self.activated=false
-    
+    self.deactivateCalled=false
+    self.playerHero:SetDayTimeVisionRange(2000)
     Timebar:Hide()
     CustomGameEventManager:Send_ServerToAllClients("show_main_menu",{})
     

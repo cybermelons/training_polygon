@@ -18,7 +18,7 @@
                 <ToggleButton checked="true" id="yashaKayaToggle" class="customCheckbox" text="#menuYashaKaya" />
             
                 <ToggleButton checked="true" id="mantaShuffle" class="customCheckbox" text="#shuffleMode" />
-                <ToggleButton checked="false" id="mantaBlink" class="customCheckbox" text="#hardcoreMode" />
+                <ToggleButton checked="false" id="hardcoreMode" class="customCheckbox" text="#hardcoreMode" />
                 <ToggleButton checked="false" id="cancelAnimToggle" class="customCheckbox" text="#animationCancelMode" />
             </Panel>
             <Panel class="ColNoFill">

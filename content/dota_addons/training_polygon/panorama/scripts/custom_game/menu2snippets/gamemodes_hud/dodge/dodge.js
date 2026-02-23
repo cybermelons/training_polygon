@@ -144,11 +144,15 @@ function startGame() {
     $.Msg(JSON.stringify(selected));
 	var yashaKaya=false
 	var yashaKayaPlayer=false
+	var hardcoreMode=false
 	if ($('#yashaKayaToggle').checked){
 		yashaKaya=true
 	}
 	if ($('#yashaKayaPlayerToggle').checked){
 		yashaKayaPlayer=true
+	}
+	if ($('#hardcoreMode').checked){
+		hardcoreMode=true
 	}
 	var stormTime=""
 	stormTime=numberSwitcher.GetAttributeString("value", "")
@@ -159,7 +163,8 @@ function startGame() {
 			dodgeSpells: selected,
 			yashaKaya: yashaKaya,
 			stormTime: stormTime,
-			yashaKayaPlayer: yashaKayaPlayer
+			yashaKayaPlayer: yashaKayaPlayer,
+			hardcoreMode: hardcoreMode
 	 	});
 }
 function getDodgeType(){
@@ -197,7 +202,7 @@ function getSelectedSkills() {
 
 
 
-
+$('#cancelAnimToggle').AddClass("Hidden")
 $("#yashaKayaPlayerToggle").AddClass("Hidden")
 //making number field for storm type
 var numberSwitcher=$.CreatePanel('Panel',$('#stormEvadeNumberSwitcher'),"storm_time_switcher")
