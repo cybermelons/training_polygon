@@ -7,6 +7,7 @@
 //	discord 
 
 //hiding scoreboard button
+$.GetContextPanel().SetDisableFocusOnMouseDown(false)
 var DotaHud=$.GetContextPanel().GetParent().GetParent().GetParent().GetParent()
 var Hud=DotaHud.FindChild("Hud")
 var HUDElements=Hud.FindChild("HUDElements")

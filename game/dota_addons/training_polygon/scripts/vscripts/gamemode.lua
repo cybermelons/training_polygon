@@ -4775,6 +4775,7 @@ function GameMode:OnNPCSpawned(keys)
   local npc = EntIndexToHScript(keys.entindex)
   --print(npc:GetUnitName(),Time(),npc:GetAbsOrigin())
   glimpseOnUnitSpawned(npc)
+  
   if eulsGameState==1 then
     Timers:CreateTimer(0.1, function()
       if not npc:IsNull() then
@@ -4850,6 +4851,16 @@ function GameMode:OnNPCSpawned(keys)
     end
   end
   if CustomGameState==1 then
+    if npc:GetUnitName()=="npc_dota_warlock_golem" then
+      npc:SetAttackCapability(0)
+      
+      Timers:CreateTimer({
+        endTime = FrameTime(),
+        callback = function()
+          npc:RemoveSelf()
+        end
+      })
+    end
     if npc:IsIllusion() then
       Timers:CreateTimer({
         endTime = FrameTime(), 
@@ -4862,16 +4873,7 @@ function GameMode:OnNPCSpawned(keys)
   end
 
 
-  if npc:GetUnitName()=="npc_dota_warlock_golem" then
-    npc:SetAttackCapability(0)
-    
-    Timers:CreateTimer({
-      endTime = FrameTime(),
-      callback = function()
-        npc:RemoveSelf()
-      end
-    })
-  end
+  
   if TIMING_START==1 then
     if npc:IsIllusion() then
       Timers:CreateTimer({

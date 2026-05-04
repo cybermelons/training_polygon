@@ -33,7 +33,12 @@ $.GetContextPanel().SetPanelEvent(
 		$.Msg('clicked')
 		clearMenuContentAndDrawModePanel()
 		var mode_menu = $.CreatePanel( "Panel", menuContent, mode+"_menu" );
-		mode_menu.BLoadLayout( "file://{resources}/layout/custom_game/menu2snippets/gamemodes_hud/"+mode+"/"+mode+".xml", false, false ); 
+		var result=mode_menu.BLoadLayout( "file://{resources}/layout/custom_game/menu2snippets/gamemodes_hud/"+mode+"/"+mode+".xml", false, false ); 
+		if (result){
+			$.Msg('panel loaded ',mode)
+		}else{
+			$.Msg('panel not loaded ',mode)
+		}
 	}
 )
 $.GetContextPanel().SetPanelEvent(

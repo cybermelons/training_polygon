@@ -42,6 +42,15 @@ function replaceHero(old_hero,new_hero)
   return newHero
 
 end
+
+function string_in_array(str, arr)
+    for _, value in ipairs(arr) do
+        if value == str then
+            return true
+        end
+    end
+    return false
+end
 --for parsing KV values like "1.0 2.0 3.0 4.0"
 function parseQuadroValue(data,level)
 	--print('parser input:',data,level)

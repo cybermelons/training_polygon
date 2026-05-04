@@ -84,7 +84,7 @@
 //=================================================================================
 // Neutral: Centaur Chief
 //=================================================================================
-    "npc_dota_neutral_centaur_khan"
+    "npc_dota_neutral_centaur_khan_custom"
     {                                       
         // General
         //----------------------------------------------------------------
@@ -98,7 +98,7 @@
         // Abilities
         //----------------------------------------------------------------
         "Ability1"                  "centaur_khan_war_stomp"            // Ability 1
-        "Ability2"                  ""          // Ability 2
+        "Ability2"                  "neutral_upgrade"           // Ability 2
         "Ability3"                  ""          // Ability 3
         "Ability4"                  ""          // Ability 4
 
@@ -111,7 +111,8 @@
         "AttackCapabilities"        "DOTA_UNIT_CAP_MELEE_ATTACK"
         "AttackDamageMin"           "49"        // Damage range min.
         "AttackDamageMax"           "55"        // Damage range max.    
-        "AttackRate"                "1.5"       // Speed of attack.
+        "AttackRate"                "2"         // Speed of attack.
+        "BaseAttackSpeed"           "135"
         "AttackAnimationPoint"      "0.3"       // Normalized time in animation cycle to attack.
         "AttackAcquisitionRange"    "500"       // Range within a target can be acquired.
         "AttackRange"               "100"       // Range within a target can be attacked.
@@ -125,21 +126,22 @@
 
         // Bounty
         //----------------------------------------------------------------
-        "BountyXP"                  "119"       // Experience earn.
-        "BountyGoldMin"             "66"        // Gold earned min.
-        "BountyGoldMax"             "78"        // Gold earned max.
+        "BountyXP"                  "90"        // Experience earn.
+        "BountyGoldMin"             "54"        // Gold earned min.
+        "BountyGoldMax"             "60"        // Gold earned max.
 
         // Movement
         //----------------------------------------------------------------
         "MovementCapabilities"      "DOTA_UNIT_CAP_MOVE_GROUND"
         "MovementSpeed"             "320"       // Speed.
+        "MovementTurnRate"          "0.9"       // Turning rate.
 
         // Status
         //----------------------------------------------------------------
         "StatusHealth"              "1100"      // Base health.
         "StatusHealthRegen"         "1"         // Health regeneration rate.
         "StatusMana"                "200"       // Base mana.
-        "StatusManaRegen"           "0.0"       // Mana regeneration rate.       
+        "StatusManaRegen"           "1.0"       // Mana regeneration rate.       
         
         // Vision
         //----------------------------------------------------------------
@@ -149,15 +151,11 @@
         // Team
         //----------------------------------------------------------------
         "TeamName"                  "DOTA_TEAM_NEUTRALS"                            // Team name.
-        "CombatClassAttack"         "DOTA_COMBAT_CLASS_ATTACK_HERO"
-        "CombatClassDefend"         "DOTA_COMBAT_CLASS_DEFEND_BASIC"
         "UnitRelationshipClass"     "DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT"
         "UseNeutralCreepBehavior" "0"
     }
-//=================================================================================
-// Neutral: Furbolg Disrupter
-//=================================================================================
-    "npc_dota_neutral_polar_furbolg_ursa_warrior"
+
+"npc_dota_neutral_polar_furbolg_ursa_warrior_custom"
     {                                       
         // General
         //----------------------------------------------------------------
@@ -171,8 +169,8 @@
         // Abilities
         //----------------------------------------------------------------
         "Ability1"                  "polar_furbolg_ursa_warrior_thunder_clap"           // Ability 1
-        "Ability2"                  "centaur_khan_endurance_aura"           // Ability 2
-        "Ability3"                  ""          // Ability 3
+        "Ability2"                  "furbolg_enrage_damage"         // Ability 2
+        "Ability3"                  "neutral_upgrade"           // Ability 3
         "Ability4"                  ""          // Ability 4
 
         // Armor
@@ -184,7 +182,8 @@
         "AttackCapabilities"        "DOTA_UNIT_CAP_MELEE_ATTACK"
         "AttackDamageMin"           "49"        // Damage range min.
         "AttackDamageMax"           "55"        // Damage range max.    
-        "AttackRate"                "1.55"      // Speed of attack.
+        "AttackRate"                "2"         // Speed of attack.
+        "BaseAttackSpeed"           "135"       // Speed of attack.
         "AttackAnimationPoint"      "0.3"       // Normalized time in animation cycle to attack.
         "AttackAcquisitionRange"    "500"       // Range within a target can be acquired.
         "AttackRange"               "100"       // Range within a target can be attacked.
@@ -198,21 +197,22 @@
 
         // Bounty
         //----------------------------------------------------------------
-        "BountyXP"                  "119"       // Experience earn.
-        "BountyGoldMin"             "76"        // Gold earned min.
-        "BountyGoldMax"             "88"        // Gold earned max.
+        "BountyXP"                  "90"        // Experience earn.
+        "BountyGoldMin"             "62"        // Gold earned min.
+        "BountyGoldMax"             "66"        // Gold earned max.
 
         // Movement
         //----------------------------------------------------------------
         "MovementCapabilities"      "DOTA_UNIT_CAP_MOVE_GROUND"
         "MovementSpeed"             "320"       // Speed.
+        "MovementTurnRate"          "0.9"       // Turning rate.
 
         // Status
         //----------------------------------------------------------------
         "StatusHealth"              "950"       // Base health.
         "StatusHealthRegen"         "1"         // Health regeneration rate.
         "StatusMana"                "300"       // Base mana.
-        "StatusManaRegen"           "0.0"       // Mana regeneration rate.       
+        "StatusManaRegen"           "1.0"       // Mana regeneration rate.       
         
         // Vision
         //----------------------------------------------------------------
@@ -222,8 +222,6 @@
         // Team
         //----------------------------------------------------------------
         "TeamName"                  "DOTA_TEAM_NEUTRALS"                            // Team name.
-        "CombatClassAttack"         "DOTA_COMBAT_CLASS_ATTACK_HERO"
-        "CombatClassDefend"         "DOTA_COMBAT_CLASS_DEFEND_BASIC"
         "UnitRelationshipClass"     "DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT"
         "UseNeutralCreepBehavior" "0"
     }   
@@ -381,7 +379,7 @@
     //=================================================================================
 // custom roshan
 //=================================================================================
-    "npc_dota_roshan"
+    "npc_dota_roshan_custom"
     {
         // General
         //
@@ -512,4 +510,93 @@
         "VisionDaytimeRange"        "1600"      // Range of vision during day light.
         "VisionNighttimeRange"      "1600"      // Range of vision at night time.
     }   
+    "npc_dota_visage_familiar1_custom"
+    {
+        // General
+        //
+        "BaseClass"                 "npc_dota_visage_familiar"  // Class of entity of link to.
+        "Model"                     "models/heroes/visage/visage_familiar.vmdl" // Model.
+        "SoundSet"                  "Visage_Familiar"                   // Name of sound set.
+        "ModelScale"                "0.66"
+        "Level"                     "2"
+        "IsSummoned"                "1"
+        "IsAncient"                 "1"
+        "UnitLabel"                 "visage_familiars"
+        "AutoAttacksByDefault"      "0"
+        "ConsideredHero"            "1"
+        "wearable"                  "600"
+        "precache"
+        {
+            "particle"          "particles/econ/events/anniversary_10th/anniversary_10th_hat_ambient_npc_dota_hero_visage_familiar.vpcf"
+        }
+        "party_hat_effects"
+        {
+            "party_hat_effect_0"            "particles/econ/events/anniversary_10th/anniversary_10th_hat_ambient_npc_dota_hero_visage_familiar.vpcf"
+        }
+
+                
+        // Abilities
+        //----------------------------------------------------------------
+        
+        "Ability1"                  "visage_summon_familiars_stone_form"            // Ability 1.
+        "Ability2"                  "visage_summon_familiars_recall"            // Ability 2.
+        "Ability3"                  "visage_gravekeepers_cloak"         // Ability 3.
+        "Ability4"                  ""          // Ability 4.
+        "Ability5"                  ""          // Ability 5.
+        "Ability6"                  ""          // Ability 6 - Extra.
+        "Ability7"                  ""          // Ability 7 - Extra.
+        "Ability8"                  ""          // Ability 8 - Extra.
+
+        // Armor
+        //----------------------------------------------------------------
+        "ArmorPhysical"             "2"         // Physical protection.
+        "MagicalResistance"             "35"        // Magical protection.
+
+        // Attack
+        //----------------------------------------------------------------
+        "AttackCapabilities"        "DOTA_UNIT_CAP_RANGED_ATTACK"
+        "AttackDamageMin"           "25"            // Damage range min.
+        "AttackDamageMax"           "25"            // Damage range max.
+        "AttackDamageType"          "DAMAGE_TYPE_ArmorPhysical"
+        "AttackRate"                "0.5"       // Speed of attack.
+        "AttackAnimationPoint"      "0.33"      // Normalized time in animation cycle to attack.
+        "AttackAcquisitionRange"    "400"       // Range within a target can be acquired.
+        "AttackRange"               "180"           // Range within a target can be attacked.
+        "ProjectileModel"           "particles/units/heroes/hero_visage/visage_familiar_base_attack.vpcf" // Particle system model for projectile.
+        "ProjectileSpeed"           "900"       // Speed of projectile.
+
+        // Bounty
+        //----------------------------------------------------------------
+        "BountyXP"                  "41"        // Experience earn.
+        "BountyGoldMin"             "100"       // Gold earned min.     // overridden by familiar_bounty in visage.txt
+        "BountyGoldMax"             "100"       // Gold earned max.     // overridden by familiar_bounty in visage.txt
+
+        // Bounds
+        //----------------------------------------------------------------
+        "BoundsHullName"            "DOTA_HULL_SIZE_REGULAR"            // Hull type used for navigation/locomotion.
+        "HealthBarOffset"           "130"
+        
+        // Movement
+        //----------------------------------------------------------------
+        "MovementCapabilities"      "DOTA_UNIT_CAP_MOVE_GROUND"
+        "MovementSpeed"             "420"       // Speed
+        "MovementTurnRate"          "0.9"       // Turning rate.
+
+        // Status
+        //----------------------------------------------------------------
+        "StatusHealth"              "500"       // Base health.
+        "StatusHealthRegen"         "0.0"       // Health regeneration rate.
+        "StatusMana"                "0"         // Base mana.
+        "StatusManaRegen"           "0.0"       // Mana regeneration rate.
+
+        // Team
+        //----------------------------------------------------------------
+        "TeamName"                  "DOTA_TEAM_BADGUYS"         // Team name.
+        "UnitRelationshipClass"     "DOTA_NPC_UNIT_RELATIONSHIP_TYPE_WARD"
+        
+        // Vision
+        //----------------------------------------------------------------
+        "VisionDaytimeRange"        "400"       // Range of vision during day light.
+        "VisionNighttimeRange"      "400"       // Range of vision at night time.
+    }
 }

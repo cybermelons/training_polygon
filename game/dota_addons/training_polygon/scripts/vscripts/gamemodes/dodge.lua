@@ -46,27 +46,30 @@ function dodge:Init()
         [34]={spell_name="phoenix_supernova", hero_name="npc_dota_hero_phoenix", cast_func="phoenix_supernova", level=1, aghs=false, shard=false, is_ability=true},
         [35]={spell_name="legion_commander_overwhelming_odds", hero_name="npc_dota_hero_legion_commander", cast_func="legion_commander_overwhelming_odds", level=1, aghs=false, shard=false, is_ability=true},
         [36]={spell_name="magnataur_reverse_polarity", hero_name="npc_dota_hero_magnataur", cast_func="magnataur_reverse_polarity", level=1, aghs=false, shard=false, is_ability=true},
-        [37]={spell_name="slardar_slithereen_crush", hero_name="npc_dota_hero_slardar", cast_func="universal_cast", level=1, aghs=false, shard=false, is_ability=true},
-        [38]={spell_name="axe_berserkers_call", hero_name="npc_dota_hero_axe", cast_func="universal_cast", level=1, aghs=false, shard=false, is_ability=true},
-        [39]={spell_name="brewmaster_thunder_clap", hero_name="npc_dota_hero_brewmaster", cast_func="universal_cast", level=1, aghs=false, shard=false, is_ability=true},
-        [40]={spell_name="centaur_hoof_stomp", hero_name="npc_dota_hero_centaur", cast_func="universal_cast", level=1, aghs=false, shard=false, is_ability=true},
-        [41]={spell_name="lion_finger_of_death", hero_name="npc_dota_hero_lion", cast_func="universal_cast", level=1, aghs=false, shard=false, is_ability=true},
-        [42]={spell_name="queenofpain_scream_of_pain", hero_name="npc_dota_hero_queenofpain", cast_func="universal_cast", level=1, aghs=false, shard=false, is_ability=true},
-        [43]={spell_name="visage_summon_familiars_stone_form", hero_name="npc_dota_visage_familiar1", cast_func="universal_cast", level=1, aghs=false, shard=false, is_ability=true},
-        [44]={spell_name="polar_furbolg_ursa_warrior_thunder_clap", hero_name="npc_dota_neutral_polar_furbolg_ursa_warrior", cast_func="universal_cast", level=1, aghs=false, shard=false, is_ability=true},
-        [45]={spell_name="centaur_khan_war_stomp", hero_name="npc_dota_neutral_centaur_khan", cast_func="universal_cast", level=1, aghs=false, shard=false, is_ability=true},
-        [46]={spell_name="techies_suicide", hero_name="npc_dota_hero_techies", cast_func="universal_cast", level=1, aghs=false, shard=false, is_ability=true},
-        [47]={spell_name="obsidian_destroyer_astral_imprisonment", hero_name="npc_dota_hero_obsidian_destroyer", cast_func="universal_cast", level=1, aghs=false, shard=false, is_ability=true},
-        [48]={spell_name="roshan_slam", hero_name="npc_dota_roshan", cast_func="universal_cast", level=1, aghs=false, shard=false, is_ability=true},
-        [49]={spell_name="invoker_sun_strike", hero_name="npc_dota_hero_invoker", cast_func="universal_cast", level=1, aghs=false, shard=false, is_ability=true},
-        [50]={spell_name="kunkka_torrent", hero_name="npc_dota_hero_kunkka", cast_func="universal_cast", level=1, aghs=false, shard=false, is_ability=true},
-        [51]={spell_name="kunkka_tidebringer", hero_name="npc_dota_hero_kunkka", cast_func="universal_cast", level=1, aghs=false, shard=false, is_ability=true},
-        [52]={spell_name="elder_titan_earth_splitter", hero_name="npc_dota_hero_elder_titan", cast_func="universal_cast", level=1, aghs=false, shard=false, is_ability=true},
-        [53]={spell_name="leshrac_split_earth", hero_name="npc_dota_hero_leshrac", cast_func="universal_cast", level=1, aghs=false, shard=false, is_ability=true},
-        [54]={spell_name="warlock_rain_of_chaos", hero_name="npc_dota_hero_warlock", cast_func="universal_cast", level=1, aghs=false, shard=false, is_ability=true},
-        [55]={spell_name="pangolier_shield_crash", hero_name="npc_dota_hero_pangolier", cast_func="universal_cast", level=1, aghs=false, shard=false, is_ability=true},
-        [56]={spell_name="dark_willow_terrorize", hero_name="npc_dota_hero_dark_willow", cast_func="universal_cast", level=1, aghs=false, shard=false, is_ability=true},
-        [57]={spell_name="item_meteor_hammer", hero_name="npc_dota_hero_riki", cast_func="universal_cast", level=1, aghs=false, shard=false, is_ability=false},
+        [37]={spell_name="slardar_slithereen_crush", hero_name="npc_dota_hero_slardar", cast_func="slardar_slithereen_crush", level=1, aghs=false, shard=false, is_ability=true},
+        [38]={spell_name="axe_berserkers_call", hero_name="npc_dota_hero_axe", cast_func="axe_berserkers_call", level=1, aghs=false, shard=false, is_ability=true},
+        [39]={spell_name="brewmaster_thunder_clap", hero_name="npc_dota_hero_brewmaster", cast_func="brewmaster_thunder_clap", level=1, aghs=false, shard=false, is_ability=true},
+        [40]={spell_name="centaur_hoof_stomp", hero_name="npc_dota_hero_centaur", cast_func="centaur_hoof_stomp", level=1, aghs=false, shard=false, is_ability=true},
+        [41]={spell_name="lion_finger_of_death", hero_name="npc_dota_hero_lion", cast_func="lion_finger_of_death", level=1, aghs=false, shard=false, is_ability=true},
+        [42]={spell_name="queenofpain_scream_of_pain", hero_name="npc_dota_hero_queenofpain", cast_func="queenofpain_scream_of_pain", level=1, aghs=false, shard=false, is_ability=true},
+        [43]={spell_name="visage_summon_familiars_stone_form", hero_name="npc_dota_visage_familiar1_custom", cast_func="visage_summon_familiars_stone_form", level=1, aghs=false, shard=false, is_ability=true},
+        [44]={spell_name="polar_furbolg_ursa_warrior_thunder_clap", hero_name="npc_dota_neutral_polar_furbolg_ursa_warrior_custom", cast_func="polar_furbolg_ursa_warrior_thunder_clap", level=1, aghs=false, shard=false, is_ability=true},
+        [45]={spell_name="centaur_khan_war_stomp", hero_name="npc_dota_neutral_centaur_khan_custom", cast_func="centaur_khan_war_stomp", level=1, aghs=false, shard=false, is_ability=true},
+        [46]={spell_name="techies_suicide", hero_name="npc_dota_hero_techies", cast_func="techies_suicide", level=1, aghs=false, shard=false, is_ability=true},
+        --[[ [47]={spell_name="obsidian_destroyer_astral_imprisonment", hero_name="npc_dota_hero_obsidian_destroyer", cast_func="obsidian_destroyer_astral_imprisonment", level=1, aghs=false, shard=false, is_ability=true},
+        [48]={spell_name="obsidian_destroyer_astral_imprisonment", hero_name="npc_dota_hero_obsidian_destroyer", cast_func="obsidian_destroyer_astral_imprisonment", level=2, aghs=false, shard=false, is_ability=true},
+        [49]={spell_name="obsidian_destroyer_astral_imprisonment", hero_name="npc_dota_hero_obsidian_destroyer", cast_func="obsidian_destroyer_astral_imprisonment", level=3, aghs=false, shard=false, is_ability=true},
+        [50]={spell_name="obsidian_destroyer_astral_imprisonment", hero_name="npc_dota_hero_obsidian_destroyer", cast_func="obsidian_destroyer_astral_imprisonment", level=4, aghs=false, shard=false, is_ability=true}, --not doing aoe damage anymore]]
+        [51]={spell_name="roshan_slam", hero_name="npc_dota_roshan_custom", cast_func="roshan_slam", level=1, aghs=false, shard=false, is_ability=true},
+        [52]={spell_name="invoker_sun_strike", hero_name="npc_dota_hero_invoker", cast_func="invoker_sun_strike", level=1, aghs=false, shard=false, is_ability=true},
+        [53]={spell_name="kunkka_torrent", hero_name="npc_dota_hero_kunkka", cast_func="kunkka_torrent", level=1, aghs=false, shard=false, is_ability=true},
+        --[[ [54]={spell_name="kunkka_tidebringer", hero_name="npc_dota_hero_kunkka", cast_func="universal_cast", level=1, aghs=false, shard=false, is_ability=true}, -- i dont like the fact that it have different experience on different attack speed of kunkka so i dont sure it should be here ]]
+        [55]={spell_name="elder_titan_earth_splitter", hero_name="npc_dota_hero_elder_titan", cast_func="elder_titan_earth_splitter", level=1, aghs=false, shard=false, is_ability=true},
+        [56]={spell_name="leshrac_split_earth", hero_name="npc_dota_hero_leshrac", cast_func="leshrac_split_earth", level=1, aghs=false, shard=false, is_ability=true},
+        [57]={spell_name="warlock_rain_of_chaos", hero_name="npc_dota_hero_warlock", cast_func="warlock_rain_of_chaos", level=1, aghs=false, shard=false, is_ability=true},
+        [58]={spell_name="pangolier_shield_crash", hero_name="npc_dota_hero_pangolier", cast_func="pangolier_shield_crash", level=1, aghs=false, shard=false, is_ability=true},
+        [59]={spell_name="dark_willow_terrorize", hero_name="npc_dota_hero_dark_willow", cast_func="dark_willow_terrorize", level=1, aghs=false, shard=false, is_ability=true},
+        [60]={spell_name="item_meteor_hammer", hero_name="npc_dota_hero_riki", cast_func="item_meteor_hammer", level=1, aghs=false, shard=false, is_ability=false},
         }
     }
     -- Assign the reference of item_manta to other dodge types for now, in future we can make a different spell lists for different dodge types
@@ -128,6 +131,13 @@ function dodge:Init()
         antimage_counterspell = 0,
         riki_tricks_of_the_trade = 0.3,
         nyx_assassin_spiked_carapace = 0,
+    }
+    self.hurtModifiers={
+        "modifier_stunned",
+        "modifier_medusa_stone_gaze_stone",
+        "modifier_axe_berserkers_call",
+        "modifier_kunkka_torrent",
+        "modifier_dark_willow_debuff_fear"
     }
     self.type="sandbox" -- Define the type of mode
     self.name="dodge" -- Name of the gamemode
@@ -207,6 +217,12 @@ function dodge:Prepare(args)
                 unitsToPrecache[#unitsToPrecache + 1] = enemyHero
                 unitsAdded[enemyHero] = true
                 print("[Dodge] Adding enemy hero: " .. enemyHero)
+                -- Exception: Visage familiar requires the main Visage hero to be precached
+                if enemyHero == "npc_dota_visage_familiar1_custom" and not unitsAdded["npc_dota_hero_visage"] then
+                    unitsToPrecache[#unitsToPrecache + 1] = "npc_dota_hero_visage"
+                    unitsAdded["npc_dota_hero_visage"] = true
+                    print("[Dodge] Adding Visage hero for familiar precache exception")
+                end
             end
         end
         -- Log the full spell info for debugging
@@ -312,6 +328,20 @@ function dodge:windrunner_powershot(entry)
     Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
     self:doPointCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint,range)
 end
+function dodge:techies_suicide(entry)
+    local abilityName=entry.spell_name
+    local abilityKV = DotaDB:GetAbilityKV(abilityName)
+    local castPoint=parseQuadroValue(abilityKV["AbilityCastPoint"])
+
+    local range=parseQuadroValue(abilityKV["AbilityCastRange"])
+    local damageDelay=parseQuadroValue(abilityKV["AbilityValues"]["duration"])
+    if self.yashaKaya then
+        castPoint=castPoint*self.yashaKayaModifier
+    end
+    castPoint=castPoint+damageDelay
+    Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
+    self:doPointCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint,range)
+end
 function dodge:rattletrap_rocket_flare(entry)
     local abilityName=entry.spell_name
     local abilityKV = DotaDB:GetAbilityKV(abilityName)
@@ -352,12 +382,81 @@ function dodge:bloodseeker_blood_bath(entry)
     Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
     self:doPointCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint,range)
 end
+function dodge:kunkka_torrent(entry)
+    local abilityName=entry.spell_name
+    local abilityKV = DotaDB:GetAbilityKV(abilityName)
+    local castPoint=parseQuadroValue(abilityKV["AbilityCastPoint"])
+    local damageDelay=parseQuadroValue(abilityKV["AbilityValues"]["delay"])
+    local range=parseQuadroValue(abilityKV["AbilityCastRange"])-500
+    if self.yashaKaya then
+        castPoint=castPoint*self.yashaKayaModifier
+    end
+    castPoint=castPoint+damageDelay
+    Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
+    self:doPointCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint,range)
+end
+function dodge:elder_titan_earth_splitter(entry)
+    local abilityName=entry.spell_name
+    local abilityKV = DotaDB:GetAbilityKV(abilityName)
+    local castPoint=parseQuadroValue(abilityKV["AbilityCastPoint"])
+    local damageDelay=parseQuadroValue(abilityKV["AbilityValues"]["crack_time"])
+    local range=parseQuadroValue(abilityKV["AbilityCastRange"])-1800
+    if self.yashaKaya then
+        castPoint=castPoint*self.yashaKayaModifier
+    end
+    castPoint=castPoint+damageDelay
+    Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
+    self:doPointCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint,range)
+end
+function dodge:warlock_rain_of_chaos(entry)
+    local abilityName=entry.spell_name
+    local abilityKV = DotaDB:GetAbilityKV(abilityName)
+    local castPoint=parseQuadroValue(abilityKV["AbilityCastPoint"])
+    local damageDelay=parseQuadroValue(abilityKV["AbilityValues"]["stun_delay"])
+    local range=parseQuadroValue(abilityKV["AbilityCastRange"])
+    if self.yashaKaya then
+        castPoint=castPoint*self.yashaKayaModifier
+    end
+    castPoint=castPoint+damageDelay
+    Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
+    self:doPointCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint,range)
+end
+function dodge:leshrac_split_earth(entry)
+    local abilityName=entry.spell_name
+    local abilityKV = DotaDB:GetAbilityKV(abilityName)
+    local castPoint=parseQuadroValue(abilityKV["AbilityCastPoint"])
+    local damageDelay=parseQuadroValue(abilityKV["AbilityValues"]["delay"])
+    local range=parseQuadroValue(abilityKV["AbilityCastRange"])
+    if self.yashaKaya then
+        castPoint=castPoint*self.yashaKayaModifier
+    end
+    castPoint=castPoint+damageDelay
+    Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
+    self:doPointCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint,range)
+end
 function dodge:pugna_nether_blast(entry)
     local abilityName=entry.spell_name
     local abilityKV = DotaDB:GetAbilityKV(abilityName)
     local castPoint=parseQuadroValue(abilityKV["AbilityCastPoint"])
     local damageDelay=parseQuadroValue(abilityKV["AbilityValues"]["delay"])
     local range=parseQuadroValue(abilityKV["AbilityCastRange"])
+    if self.yashaKaya then
+        castPoint=castPoint*self.yashaKayaModifier
+    end
+    castPoint=castPoint+damageDelay
+    Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
+    self:doPointCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint,range)
+end
+function dodge:dark_willow_terrorize(entry)
+    local abilityName=entry.spell_name
+    local abilityKV = DotaDB:GetAbilityKV(abilityName)
+    local castPoint=parseQuadroValue(abilityKV["AbilityCastPoint"])
+    
+    local range=parseQuadroValue(abilityKV["AbilityCastRange"])
+    local heigth=parseQuadroValue(abilityKV["AbilityValues"]["starting_height"])
+    local speed=parseQuadroValue(abilityKV["AbilityValues"]["destination_travel_speed"])
+	local s=math.sqrt((range*range)+(heigth*heigth))
+    local damageDelay=(s-48)/speed
     if self.yashaKaya then
         castPoint=castPoint*self.yashaKayaModifier
     end
@@ -384,6 +483,19 @@ function dodge:omniknight_purification(entry)
     local castPoint=parseQuadroValue(abilityKV["AbilityCastPoint"])
     local damageDelay=0
     local range=parseQuadroValue(abilityKV["AbilityValues"]["radius"]["value"])
+    if self.yashaKaya then
+        castPoint=castPoint*self.yashaKayaModifier
+    end
+    castPoint=castPoint+damageDelay
+    Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
+    self:doSelfCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint,range)
+end
+function dodge:obsidian_destroyer_astral_imprisonment(entry)
+    local abilityName=entry.spell_name
+    local abilityKV = DotaDB:GetAbilityKV(abilityName)
+    local castPoint=parseQuadroValue(abilityKV["AbilityCastPoint"])
+    local damageDelay=parseQuadroValue(abilityKV["AbilityValues"]["prison_duration"]["value"],self.currentAbilityLevel)
+    local range=parseQuadroValue(abilityKV["AbilityValues"]["damage_radius"]["value"])
     if self.yashaKaya then
         castPoint=castPoint*self.yashaKayaModifier
     end
@@ -423,6 +535,19 @@ function dodge:ursa_earthshock(entry)
     local castPoint=0
     local damageDelay=parseQuadroValue(abilityKV["AbilityValues"]["hop_duration"])
     local range=parseQuadroValue(abilityKV["AbilityValues"]["hop_distance"]["value"])
+    if self.yashaKaya then
+        castPoint=castPoint*self.yashaKayaModifier
+    end
+    castPoint=castPoint+damageDelay
+    Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
+    self:doNoTargetCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint,range)
+end
+function dodge:visage_summon_familiars_stone_form(entry)
+    local abilityName=entry.spell_name
+    local abilityKV = DotaDB:GetAbilityKV(abilityName)
+    local castPoint=0
+    local damageDelay=parseQuadroValue(abilityKV["AbilityValues"]["stun_delay"])
+    local range=parseQuadroValue(abilityKV["AbilityValues"]["stun_radius"]["value"])
     if self.yashaKaya then
         castPoint=castPoint*self.yashaKayaModifier
     end
@@ -484,6 +609,20 @@ function dodge:necrolyte_death_pulse(entry)
     Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
     self:doNoTargetCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint,range)
 end
+function dodge:queenofpain_scream_of_pain(entry)
+    local abilityName=entry.spell_name
+    local abilityKV = DotaDB:GetAbilityKV(abilityName)
+    local castPoint=parseQuadroValue(abilityKV["AbilityCastPoint"])
+    local projectileSpeed=parseQuadroValue(abilityKV["AbilityValues"]["projectile_speed"])
+    local range=parseQuadroValue(abilityKV["AbilityValues"]["area_of_effect"]["value"])
+    local damageDelay=(range-self.respawnOffset-50)/projectileSpeed--50 is hull sizes i guess
+    if self.yashaKaya then
+        castPoint=castPoint*self.yashaKayaModifier
+    end
+    castPoint=castPoint+damageDelay
+    Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
+    self:doNoTargetCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint,range)
+end
 function dodge:phoenix_supernova(entry)
     local abilityName=entry.spell_name
     local abilityKV = DotaDB:GetAbilityKV(abilityName)
@@ -522,6 +661,180 @@ function dodge:magnataur_reverse_polarity(entry)
     castPoint=castPoint+damageDelay
     Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
     self:doNoTargetCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint,range)
+end
+function dodge:slardar_slithereen_crush(entry)
+    local abilityName=entry.spell_name
+    local abilityKV = DotaDB:GetAbilityKV(abilityName)
+    local castPoint=parseQuadroValue(abilityKV["AbilityCastPoint"])
+    local range=parseQuadroValue(abilityKV["AbilityValues"]["crush_radius"]["value"])
+    local damageDelay=0
+    if self.yashaKaya then
+        castPoint=castPoint*self.yashaKayaModifier
+    end
+    castPoint=castPoint+damageDelay
+    Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
+    self:doNoTargetCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint,range)
+end
+function dodge:axe_berserkers_call(entry)
+    local abilityName=entry.spell_name
+    local abilityKV = DotaDB:GetAbilityKV(abilityName)
+    local castPoint=parseQuadroValue(abilityKV["AbilityCastPoint"])
+    local range=parseQuadroValue(abilityKV["AbilityValues"]["radius"]["value"])
+    local damageDelay=0
+    if self.yashaKaya then
+        castPoint=castPoint*self.yashaKayaModifier
+    end
+    castPoint=castPoint+damageDelay
+    Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
+    self:doNoTargetCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint,range)
+end
+function dodge:brewmaster_thunder_clap(entry)
+    local abilityName=entry.spell_name
+    local abilityKV = DotaDB:GetAbilityKV(abilityName)
+    local castPoint=parseQuadroValue(abilityKV["AbilityCastPoint"])
+    local range=parseQuadroValue(abilityKV["AbilityValues"]["radius"]["value"])
+    local damageDelay=0
+    if self.yashaKaya then
+        castPoint=castPoint*self.yashaKayaModifier
+    end
+    castPoint=castPoint+damageDelay
+    Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
+    self:doNoTargetCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint,range)
+end
+function dodge:roshan_slam(entry)
+    local abilityName=entry.spell_name
+    local abilityKV = DotaDB:GetAbilityKV(abilityName)
+    local castPoint=parseQuadroValue(abilityKV["AbilityCastPoint"])
+    local range=parseQuadroValue(abilityKV["AbilityValues"]["radius"]["value"])
+    local damageDelay=0
+    if self.yashaKaya then
+        castPoint=castPoint*self.yashaKayaModifier
+    end
+    castPoint=castPoint+damageDelay
+    Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
+    self:doNoTargetCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint,range)
+end
+function dodge:pangolier_shield_crash(entry)
+    local abilityName=entry.spell_name
+    local abilityKV = DotaDB:GetAbilityKV(abilityName)
+    local castPoint=parseQuadroValue(abilityKV["AbilityCastPoint"])
+    local range=parseQuadroValue(abilityKV["AbilityValues"]["radius"]["value"])
+    local damageDelay=parseQuadroValue(abilityKV["AbilityValues"]["jump_duration"])
+    if self.yashaKaya then
+        castPoint=castPoint*self.yashaKayaModifier
+    end
+    castPoint=castPoint+damageDelay
+    Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
+    self:doNoTargetCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint,range)
+end
+function dodge:centaur_hoof_stomp(entry)
+    local abilityName=entry.spell_name
+    local abilityKV = DotaDB:GetAbilityKV(abilityName)
+    local castPoint=parseQuadroValue(abilityKV["AbilityValues"]["windup_time"])
+    local range=parseQuadroValue(abilityKV["AbilityValues"]["radius"]["value"])
+    local damageDelay=0
+    if self.yashaKaya then
+        castPoint=castPoint*self.yashaKayaModifier
+    end
+    castPoint=castPoint+damageDelay
+    Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
+    self:doNoTargetCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint,range)
+end
+function dodge:polar_furbolg_ursa_warrior_thunder_clap(entry)
+    local abilityName=entry.spell_name
+    local abilityKV = DotaDB:GetAbilityKV(abilityName)
+    local castPoint=parseQuadroValue(abilityKV["AbilityCastPoint"])
+    local range=parseQuadroValue(abilityKV["AbilityValues"]["radius"]["value"])
+    local damageDelay=0
+    if self.yashaKaya then
+        castPoint=castPoint*self.yashaKayaModifier
+    end
+    castPoint=castPoint+damageDelay
+    Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
+    self:doNoTargetCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint,range)
+end
+function dodge:centaur_khan_war_stomp(entry)
+    local abilityName=entry.spell_name
+    local abilityKV = DotaDB:GetAbilityKV(abilityName)
+    local castPoint=parseQuadroValue(abilityKV["AbilityCastPoint"])
+    local range=parseQuadroValue(abilityKV["AbilityValues"]["radius"]["value"])
+    local damageDelay=0
+    if self.yashaKaya then
+        castPoint=castPoint*self.yashaKayaModifier
+    end
+    castPoint=castPoint+damageDelay
+    Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
+    self:doNoTargetCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint,range)
+end
+function dodge:item_meteor_hammer(entry)
+    local abilityName=entry.spell_name
+    local abilityKV = DotaDB:GetItemKV(abilityName)
+    local castPoint=0
+    local channelTime=parseQuadroValue(abilityKV["AbilityChannelTime"])
+    local landTime=parseQuadroValue(abilityKV["AbilityValues"]["land_time"])
+    local damageDelay=channelTime+landTime
+    local range=parseQuadroValue(abilityKV["AbilityCastRange"])
+    if self.yashaKaya then
+        castPoint=castPoint*self.yashaKayaModifier
+    end
+    castPoint=castPoint+damageDelay
+    Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
+    local enemyName=entry.hero_name
+    local enemySpell=entry.spell_name
+    local preCastDelay=self.castDelay
+    local afterCastDelay=self.afterCastDelay+castPoint --crashes without extra second
+    local spawnRange=range
+    if self.hardcoreMode then
+        spawnRange=spawnRange+self.blinkRange
+    end
+    local spawnpoint=randomCirclePositionVector(spawnRange-self.respawnOffset,self.playerHero:GetAbsOrigin())
+    self.currentEnemy=CreateUnitByNameAsync(enemyName,spawnpoint,true,nil,nil,DOTA_TEAM_BADGUYS,function(unit)
+        unit:SetForwardVector((self.playerHero:GetAbsOrigin() - spawnpoint):Normalized())
+		local ability = CreateItem(enemySpell,unit,unit)
+        unit:AddItem(ability)
+		unit:SetAttackCapability(0)
+		
+        local blink=nil
+        if self.hardcoreMode then
+            blink=CreateItem("item_blink",unit,unit)
+            unit:AddItem(blink)
+        end
+        if self.yashaKaya then
+            local yashaKaya=CreateItem("item_yasha_and_kaya",unit,unit)
+            unit:AddItem(yashaKaya)
+        end
+        unit:SetContextThink(DoUniqueString("cast_ability"),
+            function()
+                if self.hardcoreMode then
+                    local blinkPoint=(self.playerHero:GetAbsOrigin() - spawnpoint):Normalized()*self.blinkRange
+                    ExecuteOrderFromTable({
+                        UnitIndex = unit:entindex(),
+                        OrderType = DOTA_UNIT_ORDER_CAST_POSITION,
+                        AbilityIndex = blink:entindex(),
+                        Position = self.playerHero:GetAbsOrigin(),
+                        Queue = 0
+                    })
+                end
+                ExecuteOrderFromTable({
+                    UnitIndex = unit:entindex(),
+                    OrderType = DOTA_UNIT_ORDER_CAST_POSITION,
+                    AbilityIndex = ability:entindex(),
+                    Position = self.playerHero:GetAbsOrigin(),
+                    Queue = 1
+                })
+                self.removeTimer=Timers:CreateTimer(afterCastDelay, function()
+					if IsValidEntity(unit) then
+                        unit:RemoveSelf()
+                    end
+                    self:cycleEnemies()
+					return nil
+				end)
+                
+            end,
+        preCastDelay+self:getRandomDelay())
+        self.currentEnemy=unit
+        return unit
+    end)
 end
 function dodge:alchemist_unstable_concoction(entry)
     local abilityName=entry.spell_name
@@ -646,6 +959,19 @@ function dodge:lina_laguna_blade(entry)
     local abilityKV = DotaDB:GetAbilityKV(abilityName)
     local castPoint=parseQuadroValue(abilityKV["AbilityCastPoint"])
     local damageDelay=parseQuadroValue(abilityKV["AbilityValues"]["damage_delay"])
+    local range=parseQuadroValue(abilityKV["AbilityCastRange"])
+    if self.yashaKaya then
+        castPoint=castPoint*self.yashaKayaModifier
+    end
+    castPoint=castPoint+damageDelay
+    Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
+    self:doTargetCast(entry.hero_name,entry.spell_name,self.castDelay,self.afterCastDelay+castPoint,range)
+end
+function dodge:lion_finger_of_death(entry)
+    local abilityName=entry.spell_name
+    local abilityKV = DotaDB:GetAbilityKV(abilityName)
+    local castPoint=parseQuadroValue(abilityKV["AbilityCastPoint"])
+    local damageDelay=parseQuadroValue(abilityKV["AbilityValues"]["damage_delay"]["value"])
     local range=parseQuadroValue(abilityKV["AbilityCastRange"])
     if self.yashaKaya then
         castPoint=castPoint*self.yashaKayaModifier
@@ -787,6 +1113,82 @@ function dodge:invoker_emp(entry)
         unit:CastAbilityNoTarget(wex,-1)
         unit:CastAbilityNoTarget(wex,-1)
         unit:CastAbilityNoTarget(wex,-1)
+        unit:CastAbilityNoTarget(invoke,-1)
+        local blink=nil
+        if self.hardcoreMode then
+            blink=CreateItem("item_blink",unit,unit)
+            unit:AddItem(blink)
+        end
+        if self.yashaKaya then
+            local yashaKaya=CreateItem("item_yasha_and_kaya",unit,unit)
+            unit:AddItem(yashaKaya)
+        end
+        unit:SetContextThink(DoUniqueString("cast_ability"),
+            function()
+                if self.hardcoreMode then
+                    local blinkPoint=(self.playerHero:GetAbsOrigin() - spawnpoint):Normalized()*self.blinkRange
+                    ExecuteOrderFromTable({
+                        UnitIndex = unit:entindex(),
+                        OrderType = DOTA_UNIT_ORDER_CAST_POSITION,
+                        AbilityIndex = blink:entindex(),
+                        Position = self.playerHero:GetAbsOrigin(),
+                        Queue = 0
+                    })
+                end
+                ExecuteOrderFromTable({
+                    UnitIndex = unit:entindex(),
+                    OrderType = DOTA_UNIT_ORDER_CAST_POSITION,
+                    AbilityIndex = ability:entindex(),
+                    Position = self.playerHero:GetAbsOrigin(),
+                    Queue = 1
+                })
+                self.removeTimer=Timers:CreateTimer(afterCastDelay, function()
+					if IsValidEntity(unit) then
+                        unit:RemoveSelf()
+                    end
+                    self:cycleEnemies()
+					return nil
+				end)
+                
+            end,
+        preCastDelay+self:getRandomDelay())
+        self.currentEnemy=unit
+        return unit
+    end)
+end
+function dodge:invoker_sun_strike(entry)
+    local abilityName=entry.spell_name
+    local abilityKV = DotaDB:GetAbilityKV(abilityName)
+    local castPoint=parseQuadroValue(abilityKV["AbilityCastPoint"])
+    local damageDelay=parseQuadroValue(abilityKV["AbilityValues"]["delay"])
+    local range=500
+    if self.yashaKaya then
+        castPoint=castPoint*self.yashaKayaModifier
+    end
+    castPoint=castPoint+damageDelay
+    Timebar:Prepare(castPoint,self.timebarTiming,self.timebarExtraTime,self.dodgeCastPoint)
+    local enemyName=entry.hero_name
+    local enemySpell=entry.spell_name
+    local preCastDelay=self.castDelay
+    local afterCastDelay=self.afterCastDelay+castPoint
+    local spawnRange=range
+    if self.hardcoreMode then
+        spawnRange=spawnRange+self.blinkRange
+    end
+    local spawnpoint=randomCirclePositionVector(spawnRange-self.respawnOffset,self.playerHero:GetAbsOrigin())
+    self.currentEnemy=CreateUnitByNameAsync(enemyName,spawnpoint,true,nil,nil,DOTA_TEAM_BADGUYS,function(unit)
+        unit:SetForwardVector((self.playerHero:GetAbsOrigin() - spawnpoint):Normalized())
+		local ability = unit:FindAbilityByName(enemySpell)
+		unit:SetAttackCapability(0)
+		local invoke_name="invoker_invoke"
+        local exort_name="invoker_exort"
+        local invoke = unit:FindAbilityByName(invoke_name)
+        invoke:SetLevel(1)
+        local exort=unit:FindAbilityByName(exort_name)
+        exort:SetLevel(3)
+        unit:CastAbilityNoTarget(exort,-1)
+        unit:CastAbilityNoTarget(exort,-1)
+        unit:CastAbilityNoTarget(exort,-1)
         unit:CastAbilityNoTarget(invoke,-1)
         local blink=nil
         if self.hardcoreMode then
@@ -1198,7 +1600,7 @@ function dodge:doNoTargetCast(enemyName,enemySpell,preCastDelay,afterCastDelay,s
         unit:SetForwardVector((self.playerHero:GetAbsOrigin() - spawnpoint):Normalized())
 		local ability = unit:FindAbilityByName(enemySpell)
 		unit:SetAttackCapability(0)
-		unit:UpgradeAbility(ability)
+		ability:SetLevel(1)
         local blink=nil
         if self.hardcoreMode then
             blink=CreateItem("item_blink",unit,unit)
@@ -1254,7 +1656,7 @@ function dodge:doSelfCast(enemyName,enemySpell,preCastDelay,afterCastDelay,spawn
         unit:SetForwardVector((self.playerHero:GetAbsOrigin() - spawnpoint):Normalized())
 		local ability = unit:FindAbilityByName(enemySpell)
 		unit:SetAttackCapability(0)
-		unit:UpgradeAbility(ability)
+		ability:SetLevel(self.currentAbilityLevel)
         local blink=nil
         if self.hardcoreMode then
             blink=CreateItem("item_blink",unit,unit)
@@ -1335,6 +1737,7 @@ function dodge:StartGame(args)
     self.playerHero=replaceHero(old_hero,new_hero)
     self.playerHero:SetBaseHealthRegen(300)
     self.playerHero:SetBaseManaRegen(300)
+    self.playerHero:SetAbsOrigin(self.trainingPlace)
     if self.hardcoreMode then
         self.playerHero:SetDayTimeVisionRange(675)
     else
@@ -1444,7 +1847,18 @@ function dodge:SendSpellTable()
     CustomGameEventManager:Send_ServerToAllClients("dodge_spell_table",{data=self.spellTable})
 end
 function dodge:OnNPCSpawned(keys)
+    
     local npc = EntIndexToHScript(keys.entindex)
+    if npc:GetUnitName()=="npc_dota_warlock_golem" then
+        npc:SetAttackCapability(0)
+        
+        Timers:CreateTimer({
+        endTime = FrameTime(),
+        callback = function()
+            npc:RemoveSelf()
+        end
+        })
+    end
     if npc:IsIllusion() then
       Timers:CreateTimer({
         endTime = FrameTime(), 
@@ -1456,7 +1870,7 @@ function dodge:OnNPCSpawned(keys)
 end
 
 function dodge:OrderFilter(event)
-    --lets fire timebar animations from catching orders from bots
+    --lets fire timebar animations by catching orders from bots
 
     --[[ DeepPrintTable(event) ]]
     if event['issuer_player_id_const']==-1 then
@@ -1522,7 +1936,7 @@ function dodge:ModifierGained(event)
         end) ]]
 
     end
-    if event.name_const=="modifier_stunned" or event.name_const=="modifier_medusa_stone_gaze_stone" then
+    if string_in_array(event.name_const,self.hurtModifiers) then
         event.duration=0.2
         if self.currentDodgeType~="monkey_king_mischief" then
             if self.playerGotHurt==false then
@@ -1557,11 +1971,19 @@ function dodge:OnNonPlayerUsedAbility(keys)
 end
 function dodge:DamageFilter(event)
     --[[ DeepPrintTable(event) ]]
-    local damager=EntIndexToHScript(event.entindex_attacker_const)
+    local damager=nil
+    if event.entindex_attacker_const then
+        damager=EntIndexToHScript(event.entindex_attacker_const)
+    end
     local damager_name
     if damager~=nil then
         --[[ print(damager:GetUnitName()) ]]
         if damager:GetUnitName()=="npc_dota_hero_phoenix" then
+            --checking for dodging stun only
+            return false
+        end
+        if damager:GetUnitName()=="npc_dota_hero_kunkka" then
+            --checking for dodging stun only
             return false
         end
     end

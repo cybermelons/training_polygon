@@ -1,6 +1,7 @@
 // Precache Modal - shows loading progress when starting a gamemode
 
 var overlay = $.GetContextPanel();
+$.GetContextPanel().SetDisableFocusOnMouseDown(false)
 var titleLabel = $('#precache_title');
 var itemLabel = $('#precache_item');
 var progressBar = $('#precache_progress_bar');
@@ -75,7 +76,7 @@ function onPrecacheComplete(data) {
         hideModal();
         resetModal();
     });
-    lower_hud.SetFocus()
+    /* lower_hud.SetFocus() */
 }
 
 // Subscribe to events

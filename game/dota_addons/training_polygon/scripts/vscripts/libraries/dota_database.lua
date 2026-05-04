@@ -40,6 +40,11 @@ function DotaDB:GetAbilityKV(abilityName)
 
 end
 
+function DotaDB:GetItemKV(abilityName)
+  return self.items_KV[abilityName]
+
+end
+
 function DotaDB:GetAllHeroes()
   local heroTable={}
   
