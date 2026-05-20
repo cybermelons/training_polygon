@@ -4404,9 +4404,15 @@ function lasthit_end( eventSourceIndex, args )
   AGGRO_ENEMY:RemoveSelf()
   LH_DIRE_TOWER:RemoveSelf()
   LH_RADIANT_TOWER:RemoveSelf()
-  if not SN_AI_SNIPER:IsNull()then
+  if SN_AI_SNIPER~=nil and not SN_AI_SNIPER:IsNull() then
     SN_AI_SNIPER:RemoveSelf()
   end
+  --reset sniper AI state so a fresh session re-arms the bot (otherwise the
+  --think-timer's "if SN_AI_CURRENT_TARGET==nil" guard stays false and the
+  --new sniper never issues an attack order)
+  SN_AI_SNIPER=nil
+  SN_AI_CURRENT_TARGET=nil
+  SN_AI_KILLCOUNT=0
   Timers:RemoveTimer("ai_thinker_for_sniper")
   Timers:RemoveTimer("ai_thinker_for_sniper_reposition")
   Timers:RemoveTimer("last_hit_waves")
