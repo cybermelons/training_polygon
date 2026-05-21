@@ -4401,7 +4401,8 @@ function lasthit_start_fix( eventSourceIndex, args )
         end
       end
     })
-  LASTHIT_MIN_DMG=active_hero:GetBaseDamageMin()
+  -- Min-damage threshold is computed live in OnEntityHurt via
+  -- GetAverageTrueAttackDamage so item buys mid-session count correctly.
   --sniper enemy: spawn on the team OPPOSITE the player, near their tower
   if args['sniper']==1 then
     local sniper_spawn
@@ -7822,12 +7823,15 @@ function GameMode:OnEntityHurt(keys)
       sniperAIonUnitHurt(entCause,entVictim,victim_hp)
 
       local victim_hp=entVictim:GetHealth()
-      local victim_armor=entVictim:GetPhysicalArmorValue(false)
-      --print('victim armor:',victim_armor)
-      local dmg_multiplier=1-(0.05*victim_armor/(1+0.05*math.abs(victim_armor)))
-      if victim_hp<=LASTHIT_MIN_DMG*dmg_multiplier then
+      -- Use the hero's CURRENT damage (factoring items + buffs) rather than a
+      -- stale base-damage snapshot from session start. GetAverageTrueAttackDamage
+      -- returns damage post-armor, so we don't need the manual armor formula.
+      local true_dmg = 0
+      if active_hero and not active_hero:IsNull() then
+        true_dmg = active_hero:GetAverageTrueAttackDamage(entVictim)
+      end
+      if victim_hp <= true_dmg then
         addLHCreepToTable(entVictim)
-        
       end
 --[[      if entCause==SN_AI_SNIPER then
         SN_AI_SNIPER:Stop()
