@@ -28,9 +28,10 @@ function clearMenuContent(){
 	});
 }
 
-var home_page = $.CreatePanel( "Panel", menuContent, "home_page" ); 
-home_page.BLoadLayout( "file://{resources}/layout/custom_game/menu2snippets/main_menu/home_page.xml", false, false );
-$('#menu_home').selected=true
+// Default to the play menu (sandbox + competitive modes) instead of the home page.
+var play_menu = $.CreatePanel( "Panel", menuContent, "play_menu" );
+play_menu.BLoadLayout( "file://{resources}/layout/custom_game/menu2snippets/main_menu/play_menu.xml", false, false );
+$('#menu_play').selected=true
 
 $('#menu_play').SetPanelEvent (
 "onactivate", 

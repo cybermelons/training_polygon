@@ -13,6 +13,17 @@
     margin-bottom: 8px;
 }
 
+.lasthitSelectedHeroBox {
+    margin-left: 24px;
+}
+
+.lasthitSelectedHeroPortrait {
+    width: 192px;
+    height: 108px;
+    margin-top: 4px;
+    border: 1px solid #555;
+}
+
 .lasthitSplit {
     width: 100%;
     margin-top: 4px;

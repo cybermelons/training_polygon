@@ -5,28 +5,31 @@ var type=$.GetContextPanel().GetAttributeString("type", "")
 var menuContent = $.GetContextPanel().GetParent().GetParent().GetParent().GetParent().GetParent();
 var leftMenu = $.GetContextPanel().GetParent().GetParent().GetParent().GetParent().GetParent().GetParent().GetParent().GetParent().GetParent().FindChild("menu_left_bar");
 var playButton=leftMenu.FindChild("menu_button_container").FindChild("menu_play")
-//$.Msg(playButton.id)
-var image=$('#gmImage')
-if (type=="comp"){
-	//image.style['background-image']='url("file://{resources}/videos/15503461349800.webm");'
-}else{
-	//image.style['background-image']='url("file://{resources}/videos/test2.webm");'
-}
-/*image.style['background-image']='url("s2r://panorama/images/custom_game/test_png.vtex")'*/
-/*var videoPanel=$('#mode_video')
-videoPanel.SetMovie('file://{resources}/videos/15503461349800.webm')
-videoPanel.Play()
-videoPanel.Stop()*/
+
+// Per-mode thumbnails using existing addon PNGs. Modes not listed fall back
+// to menu_other.png so unknown additions still render something.
+var MODE_THUMBS = {
+	dodge:    "manta_menu",
+	timing:   "timing_training",
+	lasthit:  "creep_radiant",
+	aim_ez:   "aim",
+	aim_med:  "aim2",
+	aim_hard: "aim3",
+	map_aim:  "map_aim",
+	aim_move: "reaction_menu",
+	glimpse:  "glimpse_train",
+	armlet:   "armlet_menu",
+	invoker:  "invoker_menu",
+	hookshot: "hookshot_menu",
+	shop:     "shop_menu",
+	other:    "menu_other"
+};
+var thumbName = MODE_THUMBS[mode] || "menu_other";
+var thumb = $('#mode_thumb');
+thumb.SetImage('file://{images}/custom_game/' + thumbName + '.png');
+
 var modeName=$('#mode_name')
 modeName.text=mode
-videoPanel=$('#mode_video')
-videoPanel.ClearPanelEvent("onactivate")
-videoPanel.ClearPanelEvent("onload")
-videoPanel.SetMovie('file://{resources}/videos/15503461349800.webm')
-videoPanel.Play()
-$.Schedule(0.1, function() {
-	videoPanel.Pause()
-})
 $.GetContextPanel().SetPanelEvent(
 	"onactivate", 
 	function() {
@@ -45,18 +48,6 @@ $.GetContextPanel().SetPanelEvent(
 		}else{
 			$.Msg('panel not loaded ',mode)
 		} */
-	}
-)
-$.GetContextPanel().SetPanelEvent(
-	"onmouseover", 
-	function() {
-		videoPanel.Play()
-	}
-)
-$.GetContextPanel().SetPanelEvent(
-	"onmouseout", 
-	function() {
-		videoPanel.Pause()
 	}
 )
 

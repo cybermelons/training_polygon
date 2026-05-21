@@ -6,7 +6,7 @@
         <include src="file://{resources}/scripts/custom_game/menu2snippets/mode_button.js" />
     </scripts>
     <Button class="gameModeContainer">
-        <Movie hittest="false" id="mode_video" class="gmImageContainer" repeat="true" autoplay="onload" />
+        <Image hittest="false" id="mode_thumb" class="gmThumbContainer" scaling="stretch-to-fit-y-preserve-aspect" />
         <Panel class="gmFooter">
             <Label class="embeedingContentLabel gameModeLabel" id="mode_name" text="nothing"/>
         </Panel>

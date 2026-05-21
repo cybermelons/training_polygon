@@ -10,7 +10,7 @@
         <Panel id="lasthitPicker" class="Col">
             <Label class="menu_button_label" text="last hit"/>
 
-            <Panel class="lasthitTopRow">
+            <Panel class="RowNoFill lasthitTopRow">
                 <Panel class="ColNoFill padding5">
                     <Label text="Side"/>
                     <Panel class="lasthitSideToggle">
@@ -22,6 +22,10 @@
                         </Button>
                     </Panel>
                     <ToggleButton checked="true" id="lasthitSniperToggle" class="customCheckbox" text="Enemy Sniper Bot"/>
+                </Panel>
+                <Panel class="ColNoFill padding5 lasthitSelectedHeroBox">
+                    <Label class="settingLabel" text="Selected hero"/>
+                    <DOTAHeroImage id="lasthitSelectedHeroPortrait" class="lasthitSelectedHeroPortrait" heroname="npc_dota_hero_antimage" heroimagestyle="landscape"/>
                 </Panel>
             </Panel>
 

@@ -154,6 +154,11 @@ function selectSide(side) {
 // --- Hero picker (inline grid) ---
 var selectedHero = 'npc_dota_hero_antimage';
 
+function refreshSelectedHeroPortrait() {
+    var portrait = $('#lasthitSelectedHeroPortrait');
+    if (portrait) { portrait.heroname = selectedHero; }
+}
+
 // "npc_dota_hero_storm_spirit" -> "Storm Spirit"
 function prettifyHeroName(npcName) {
     var raw = npcName.replace('npc_dota_hero_', '');
@@ -202,6 +207,7 @@ function saveHeroList(data) {
                 if (prev) { prev.RemoveClass('lasthitHeroSelected'); }
                 selectedHero = n;
                 b.AddClass('lasthitHeroSelected');
+                refreshSelectedHeroPortrait();
             };
         })(heroButton, heroName));
         heroButton.SetPanelEvent('onmouseover', (function(b, n) {
@@ -268,6 +274,7 @@ function applyLasthitPrefs(saved) {
         selectedHero = saved.hero;
         var next = $('#' + selectedHero);
         if (next) { next.AddClass('lasthitHeroSelected'); }
+        refreshSelectedHeroPortrait();
     }
     if (saved.side !== undefined) { selectSide(saved.side); }
     if (saved.sniper !== undefined) { $('#lasthitSniperToggle').checked = (saved.sniper == 1); }
