@@ -26,7 +26,12 @@
             </Panel>
 
             <Panel class="RowNoFill lasthitSplit">
-                <Panel id="lasthitItemsCol" class="ColNoFill lasthitColLeft">
+                <Panel id="lasthitHeroCol" class="ColNoFill lasthitColLeft">
+                    <Label text="Hero"/>
+                    <Panel id="lasthitHeroGrid"/>
+                </Panel>
+
+                <Panel id="lasthitItemsCol" class="ColNoFill lasthitColRight">
                     <Label text="Starting Items (600g cap)"/>
                     <Panel class="RowNoFill">
                         <Label class="settingLabel" text="Cost: "/>
@@ -35,11 +40,6 @@
                     <Panel id="lasthitInventory"/>
                     <Label class="settingLabel" text="Click an item to add it. Click a slot to clear it."/>
                     <Panel id="lasthitItemsGrid"/>
-                </Panel>
-
-                <Panel id="lasthitHeroCol" class="ColNoFill lasthitColRight">
-                    <Label text="Hero"/>
-                    <Panel id="lasthitHeroGrid"/>
                 </Panel>
             </Panel>
 
