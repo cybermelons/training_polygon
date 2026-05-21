@@ -4303,6 +4303,7 @@ function lasthit_start_fix( eventSourceIndex, args )
   LH_AVG_TIMES={}
   LH_GOOD_HITS=0
   LH_BAD_HITS=0
+  GameMode:HideMenu()
   CustomGameEventManager:Send_ServerToAllClients("lh_start",{})
   local hero=args['hero']
   local lane=args['lane']
@@ -4417,6 +4418,7 @@ function lasthit_end( eventSourceIndex, args )
   Timers:RemoveTimer("ai_thinker_for_sniper_reposition")
   Timers:RemoveTimer("last_hit_waves")
   CustomGameEventManager:Send_ServerToAllClients("custom_training_ends",{})
+  GameMode:ShowMenu()
 end
 --invoker_invoke_end euls_change_str manta_challenge_start
 --ss_scepter_toggle ss_training_end training_polygon_end change_skill_lvl invoker_procast_end ss_blink_toggle
