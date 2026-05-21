@@ -1375,6 +1375,7 @@ function dodge:medusa_stone_gaze(entry)
                     AbilityIndex = ability:entindex(),
                     Queue = 1
                 })
+                self.spellImpactTime = Time() + (afterCastDelay - self.afterCastDelay)
                 self.removeTimer=Timers:CreateTimer(afterCastDelay, function()
 					if IsValidEntity(unit) then
                         unit:RemoveSelf()
@@ -1449,6 +1450,7 @@ function dodge:doTargetCast(enemyName,enemySpell,preCastDelay,afterCastDelay,spa
                             TargetIndex = self.playerHero:entindex(),
                             Queue = 1
                         })
+                        self.spellImpactTime = Time() + (afterCastDelay - self.afterCastDelay)
                     end
                     delay=0.15
                     if ability:IsCooldownReady()==false then
@@ -1459,7 +1461,7 @@ function dodge:doTargetCast(enemyName,enemySpell,preCastDelay,afterCastDelay,spa
                             end
                             self:cycleEnemies()
                             return nil
-                        end) 
+                        end)
                     else
                         tryToCast()
                     end
@@ -1593,6 +1595,9 @@ function dodge:doPointCast(enemyName,enemySpell,preCastDelay,afterCastDelay,spaw
                     Position = self.playerHero:GetAbsOrigin(),
                     Queue = 1
                 })
+                -- Predicted impact time = now + (afterCastDelay - cleanup) where
+                -- afterCastDelay = self.afterCastDelay + castPoint + damageDelay.
+                self.spellImpactTime = Time() + (afterCastDelay - self.afterCastDelay)
                 self.removeTimer=Timers:CreateTimer(afterCastDelay, function()
 					if IsValidEntity(unit) then
                         unit:RemoveSelf()
@@ -1600,7 +1605,7 @@ function dodge:doPointCast(enemyName,enemySpell,preCastDelay,afterCastDelay,spaw
                     self:cycleEnemies()
 					return nil
 				end)
-                
+
             end,
         preCastDelay+self:getRandomDelay())
         self.currentEnemy=unit
@@ -1649,6 +1654,7 @@ function dodge:doNoTargetCast(enemyName,enemySpell,preCastDelay,afterCastDelay,s
                     AbilityIndex = ability:entindex(),
                     Queue = 1
                 })
+                self.spellImpactTime = Time() + (afterCastDelay - self.afterCastDelay)
                 self.removeTimer=Timers:CreateTimer(afterCastDelay, function()
 					if IsValidEntity(unit) then
                         unit:RemoveSelf()
@@ -1876,28 +1882,47 @@ function dodge:checkResult()
             -- Damage never landed AND no dodge pressed: spell just missed.
             Notifications:Show('green','good', self.currentAbilityName)
         end
-    else
-        -- Negative delay = pressed before impact. Positive = pressed too late.
-        local delay = self.playerDodgeTime - self.playerHurtTime
-        local rounded = math.floor(delay*1000)/1000
-        local cp = self.dodgeCastPoint or 0
-        if not hurt then
-            Notifications:Show('green','good '..rounded..'s', self.currentAbilityName)
-        elseif delay < -cp then
-            -- Pressed early enough to cover the castpoint window but still got
-            -- hit -- means the dodge ability couldn't catch this specific spell.
-            Notifications:Show('yellow','close '..rounded..'s', self.currentAbilityName)
-        elseif delay < 0 then
-            -- Pressed before impact but inside the castpoint -- dodge wasn't
-            -- active in time.
-            Notifications:Show('yellow','just late '..rounded..'s', self.currentAbilityName)
+    elseif self.spellImpactTime == nil then
+        -- Bespoke spell handler didn't set impact time, can't compute timing.
+        -- Fall back to a simple grade.
+        if hurt then
+            Notifications:Show('red','bad', self.currentAbilityName)
         else
-            -- Damage already landed when dodge was pressed.
-            Notifications:Show('red','late '..rounded..'s', self.currentAbilityName)
+            Notifications:Show('green','good', self.currentAbilityName)
+        end
+    else
+        -- "Good window" = the press-time interval where the dodge modifier will
+        -- be active when impact lands. Factors in BOTH the dodge ability's cast
+        -- point (delay before modifier applies) AND its invuln duration.
+        --   latestSafePress   = impact - dodgeCastPoint
+        --   earliestSafePress = latestSafePress - dodgeDuration
+        -- windowDelta is measured from earliestSafePress.
+        --   0                  = pressed at the earliest moment that still catches impact
+        --   dodgeDuration      = pressed at the latest possible moment
+        --   < 0                = too early, dodge faded before impact
+        --   > dodgeDuration    = too late, damage already landed
+        local castPoint = (self.dodgeCastPointTable and self.dodgeCastPointTable[self.currentDodgeType]) or 0
+        local windowLen = (self.dodgeWindowTime and self.dodgeWindowTime[self.currentDodgeType]) or 0
+        local latestSafePress   = self.spellImpactTime - castPoint
+        local earliestSafePress = latestSafePress - windowLen
+        local windowDelta = self.playerDodgeTime - earliestSafePress
+        local rounded = math.floor(windowDelta*1000)/1000
+        if not hurt then
+            Notifications:Show('green','good +'..rounded..'s into '..windowLen..'s window', self.currentAbilityName)
+        elseif windowDelta < 0 then
+            -- Pressed too early: dodge faded before impact.
+            Notifications:Show('yellow','early '..rounded..'s (before window)', self.currentAbilityName)
+        else
+            -- Pressed past the latest safe moment: damage landed.
+            local late = self.playerDodgeTime - latestSafePress
+            local lateRounded = math.floor(late*1000)/1000
+            Notifications:Show('red','late +'..lateRounded..'s past deadline', self.currentAbilityName)
         end
     end
     self.playerGotHurt = false
     self.dodgePressed = false
+    -- Clear so the next spell's bespoke handler (if any) doesn't inherit it.
+    self.spellImpactTime = nil
 end
 function dodge:SendSpellTable()
     --[[ print(self.spellTable)
