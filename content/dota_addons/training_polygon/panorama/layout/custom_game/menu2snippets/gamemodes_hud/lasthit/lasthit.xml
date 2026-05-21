@@ -10,7 +10,7 @@
         <Panel id="lasthitPicker" class="Col">
             <Label class="menu_button_label" text="last hit"/>
 
-            <Panel class="RowNoFill">
+            <Panel class="lasthitTopRow">
                 <Panel class="ColNoFill padding5">
                     <Label text="Side"/>
                     <Panel class="lasthitSideToggle">
@@ -25,17 +25,23 @@
                 </Panel>
             </Panel>
 
-            <Label text="Hero"/>
-            <Panel id="lasthitHeroGrid"/>
+            <Panel class="lasthitSplit">
+                <Panel id="lasthitItemsCol" class="lasthitColLeft">
+                    <Label text="Starting Items (600g cap)"/>
+                    <Panel class="RowNoFill">
+                        <Label class="settingLabel" text="Cost: "/>
+                        <Label id="lasthitItemsCost" class="settingLabel" text="0 / 600"/>
+                    </Panel>
+                    <Panel id="lasthitInventory"/>
+                    <Label class="settingLabel" text="Click an item to add it. Click a slot to clear it."/>
+                    <Panel id="lasthitItemsGrid"/>
+                </Panel>
 
-            <Label text="Starting Items (600g cap)"/>
-            <Panel class="RowNoFill">
-                <Label class="settingLabel" text="Cost: "/>
-                <Label id="lasthitItemsCost" class="settingLabel" text="0 / 600"/>
+                <Panel id="lasthitHeroCol" class="lasthitColRight">
+                    <Label text="Hero"/>
+                    <Panel id="lasthitHeroGrid"/>
+                </Panel>
             </Panel>
-            <Panel id="lasthitInventory" class="RowNoFill"/>
-            <Label class="settingLabel" text="Click to add to next free slot. Click a slot to clear it."/>
-            <Panel id="lasthitItemsGrid" class="RowNoFill"/>
 
             <Panel class="RowNoFill">
                 <Button class="menu_button mode_play" id="menu_play" onactivate="startLasthit()">

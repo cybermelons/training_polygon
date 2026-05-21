@@ -168,6 +168,10 @@ function saveHeroList(data) {
         var heroName = heroList[keys[i]];
         var heroButton = $.CreatePanel('Button', grid, heroName);
         heroButton.AddClass('lasthitHeroButton');
+        // Halo behind the icon — shown when this hero is selected.
+        var halo = $.CreatePanel('Panel', heroButton, 'halo_' + keys[i]);
+        halo.AddClass('lasthitHeroHalo');
+
         var heroIcon = $.CreatePanel('DOTAHeroImage', heroButton, 'icon_' + keys[i]);
         heroIcon.heroimagestyle = 'icon';
         heroIcon.heroname = heroName;

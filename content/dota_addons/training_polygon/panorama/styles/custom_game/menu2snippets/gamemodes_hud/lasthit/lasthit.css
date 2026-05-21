@@ -3,10 +3,38 @@
     height: 100%;
 }
 
+.lasthitTopRow {
+    flow-children: right;
+    margin-bottom: 8px;
+}
+
+.lasthitSplit {
+    flow-children: right;
+    width: 100%;
+    margin-top: 4px;
+    margin-bottom: 8px;
+}
+
+.lasthitColLeft {
+    flow-children: down;
+    width: 280px;
+    margin-right: 24px;
+    horizontal-align: left;
+}
+
+.lasthitColRight {
+    flow-children: down;
+    horizontal-align: left;
+}
+
 #lasthitItemsGrid {
     flow-children: right-wrap;
-    overflow: squish scroll;
+    width: 244px;
     margin-top: 6px;
+    padding: 4px;
+    background-color: #0a0a0a55;
+    border: 1px solid #2a2a2a;
+    horizontal-align: left;
 }
 
 .lasthitItemButton {
@@ -97,13 +125,14 @@
 
 #lasthitInventory {
     flow-children: right-wrap;
-    width: 222px;
-    height: 120px;
-    margin-top: 4px;
-    margin-bottom: 4px;
-    padding: 3px;
+    width: 244px;
+    height: 132px;
+    margin-top: 6px;
+    margin-bottom: 8px;
+    padding: 8px;
     background-color: #0a0a0a99;
     border: 1px solid #333;
+    horizontal-align: left;
 }
 
 .lasthitInventorySlot {
@@ -143,29 +172,47 @@
 }
 
 .lasthitHeroButton {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     margin: 2px;
     padding: 0px;
-    border: 1px solid #212121;
-    transition-property: border;
+    border: 0px;
+    background-color: #00000000;
+    transition-property: background-color;
     transition-duration: 0.12s;
 }
 
-.lasthitHeroButton:hover {
-    border: 1px solid #ADD9E6;
-}
-
-.lasthitHeroIcon {
-    width: 100%;
-    height: 100%;
+/* Circular halo behind the icon — hidden by default, blue on hover, gold when selected. */
+.lasthitHeroHalo {
+    width: 34px;
+    height: 34px;
     horizontal-align: center;
     vertical-align: center;
+    border-radius: 50%;
+    background-color: #ADD9E6;
+    box-shadow: 0px 0px 11px 3px #ADD9E6;
+    opacity: 0;
+    transition-property: opacity, background-color, box-shadow;
+    transition-duration: 0.15s;
 }
 
-.lasthitHeroSelected {
-    border: 2px solid #FFDF80;
-    background-color: #8ebdcb77;
+.lasthitHeroButton:hover .lasthitHeroHalo {
+    opacity: 0.55;
+}
+
+.lasthitHeroSelected .lasthitHeroHalo {
+    background-color: #FFDF80;
+    box-shadow: 0px 0px 11px 3px #FFDF80;
+    opacity: 0.9;
+}
+
+/* The icon, centered above the halo. */
+.lasthitHeroIcon {
+    width: 36px;
+    height: 36px;
+    horizontal-align: center;
+    vertical-align: center;
+    z-index: 2;
 }
 
 #lasthitHud {
