@@ -39,6 +39,17 @@ function Precache( context )
   PrecacheModel("models/items/kunkka/kunkka_immortal/kunkka_shark_fin.vmdl", context)
   PrecacheModel("models/items/kunkka/kunkka_immortal/kunkka_shark_immortal.vmdl", context)
   PrecacheModel("models/items/kunkka/kunkka_immortal/kunkka_shark_immortal_splash_a.vmdl", context)
+
+  -- lasthit-trainer dependencies: sniper bot, axe aggro dummy, mid towers,
+  -- and the creep waves spawned by sendDireMidCreepwave/sendRadiantMidCreepwave.
+  PrecacheUnitByNameSync("npc_dota_hero_sniper", context)
+  PrecacheUnitByNameSync("npc_dota_hero_axe", context)
+  PrecacheUnitByNameSync("npc_dota_badguys_tower1_mid", context)
+  PrecacheUnitByNameSync("npc_dota_goodguys_tower1_mid", context)
+  PrecacheUnitByNameSync("npc_dota_creep_badguys_melee", context)
+  PrecacheUnitByNameSync("npc_dota_creep_goodguys_melee", context)
+  PrecacheUnitByNameSync("npc_dota_creep_badguys_ranged", context)
+  PrecacheUnitByNameSync("npc_dota_creep_goodguys_ranged", context)
   -- print('doing deep precache')
   -- local itemsKV=LoadKeyValues("scripts/items/items_game.txt")
   -- local heroesKV=LoadKeyValues("scripts/npc/npc_heroes.txt")

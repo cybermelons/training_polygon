@@ -57,6 +57,7 @@ require('libraries/precache')
 require('libraries/timebar')
 require('libraries/notifications')
 require('libraries/place_picker')
+require('libraries/prefs')
 require('utils')
 
 ping_reader:Init()
@@ -4286,6 +4287,18 @@ function lasthit_start( eventSourceIndex, args )
 
 end
 function lasthit_start_fix( eventSourceIndex, args )
+  -- Persist picker state so the UI can restore it next session. Wrapped in
+  -- pcall: prefs failures must NEVER block the actual trainer from spawning.
+  pcall(function()
+    Prefs:Set("lasthit", {
+        hero = args['hero'],
+        side = args['side'],
+        sniper = args['sniper'],
+        items = args['items'],
+    })
+    Prefs:Set("last_mode", "lasthit")
+  end)
+
   --middle point Vector(-498.22644042969,-296.97790527344,128)
   lh_middle_point=Vector(-498.22644042969,-296.97790527344,128)
   lh_dire_tower_spawn=lh_middle_point+Vector(1,1,0)*1000
@@ -4303,6 +4316,7 @@ function lasthit_start_fix( eventSourceIndex, args )
   LH_AVG_TIMES={}
   LH_GOOD_HITS=0
   LH_BAD_HITS=0
+  GameMode:HideMenu()
   CustomGameEventManager:Send_ServerToAllClients("lh_start",{})
   local hero=args['hero']
   local lane=args['lane']
@@ -4311,26 +4325,26 @@ function lasthit_start_fix( eventSourceIndex, args )
   player_side=0
   local hero_respawn
   local enemy_side
+  -- Spawn positions are mirrored across the lane midpoint (lh_middle_point).
+  -- Radiant: closer to the radiant tower at south-west end of the practice lane.
+  -- Dire:    closer to the dire tower at north-east end.
+  local radiant_hero_spawn = Vector(-2717.9250488281, -1176.9210205078, 128)
+  local dire_hero_spawn    = Vector(1721.0, 584.0, 128)
   if side==0 then
-    --hero_respawn=Vector(-3968.054443, -3462.106689, 264.750000)
-    hero_respawn=Vector(-930.81896972656,157.91223144531,128)
+    hero_respawn=radiant_hero_spawn
     player_side=DOTA_TEAM_GOODGUYS
     enemy_side=DOTA_TEAM_BADGUYS
-    --radiant
   else
+    hero_respawn=dire_hero_spawn
     player_side=DOTA_TEAM_BADGUYS
     enemy_side=DOTA_TEAM_GOODGUYS
-    --hero_respawn=Vector(3450.819824, 2937.588135, 264.000000)
-    hero_respawn=Vector(-930.81896972656,157.91223144531,128)
-    --dire
   end
   local player=PlayerResource:GetPlayer(args.PlayerID)
   print("PLAYER ID:", args.PlayerID)
   local old_hero=player:GetAssignedHero()
   PlayerResource:SetCustomTeamAssignment(args.PlayerID,player_side)
   active_hero=replaceHero(old_hero,hero)
-  --active_hero:SetAbsOrigin(hero_respawn)
-  active_hero:SetAbsOrigin(Vector(-2717.9250488281,-1176.9210205078,128))
+  active_hero:SetAbsOrigin(hero_respawn)
   active_hero:SetMoveCapability(1)
   if active_hero:GetUnitName()=="npc_dota_hero_morphling" then
     local ability1=active_hero:FindAbilityByName("morphling_morph_agi")
@@ -4385,12 +4399,18 @@ function lasthit_start_fix( eventSourceIndex, args )
       end
     })
   LASTHIT_MIN_DMG=active_hero:GetBaseDamageMin()
-  --sniper enemy
+  --sniper enemy: spawn on the team OPPOSITE the player, near their tower
   if args['sniper']==1 then
-    sniper=CreateUnitByName("npc_dota_hero_sniper",lh_dire_tower_spawn+Vector(200,0,0) , true, nil, nil, DOTA_TEAM_BADGUYS)
+    local sniper_spawn
+    if side==0 then
+      -- player is Radiant; sniper on Dire near dire tower
+      sniper_spawn = lh_dire_tower_spawn + Vector(200,0,0)
+    else
+      -- player is Dire; sniper on Radiant near radiant tower
+      sniper_spawn = lh_radiant_tower_spawn + Vector(-200,0,0)
+    end
+    sniper=CreateUnitByName("npc_dota_hero_sniper", sniper_spawn, true, nil, nil, enemy_side)
     activateShiperAI(sniper)
-    --sniperAIv2(sniper)
-    --naiSniper(sniper)
     sniper:SetControllableByPlayer(active_hero:GetPlayerID(),false)
   end
 end
@@ -4417,6 +4437,12 @@ function lasthit_end( eventSourceIndex, args )
   Timers:RemoveTimer("ai_thinker_for_sniper_reposition")
   Timers:RemoveTimer("last_hit_waves")
   CustomGameEventManager:Send_ServerToAllClients("custom_training_ends",{})
+  GameMode:ShowMenu()
+  -- Return the player to the lasthit picker (not the root play menu) so
+  -- they can immediately reconfigure and re-Start.
+  CustomGameEventManager:Send_ServerToAllClients("main_menu_load_page", {
+    page = "file://{resources}/layout/custom_game/menu2snippets/gamemodes_hud/lasthit/lasthit.xml"
+  })
 end
 --invoker_invoke_end euls_change_str manta_challenge_start
 --ss_scepter_toggle ss_training_end training_polygon_end change_skill_lvl invoker_procast_end ss_blink_toggle

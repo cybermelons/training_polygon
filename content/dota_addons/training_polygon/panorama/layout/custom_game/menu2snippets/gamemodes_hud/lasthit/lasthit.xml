@@ -1,0 +1,76 @@
+<root>
+    <styles>
+        <include src="file://{resources}/styles/custom_game/mainmenu_v2.css" />
+        <include src="file://{resources}/styles/custom_game/menu2snippets/gamemodes_hud/lasthit/lasthit.css" />
+    </styles>
+    <scripts>
+        <include src="file://{resources}/scripts/custom_game/menu2snippets/gamemodes_hud/lasthit/lasthit.js" />
+    </scripts>
+    <Panel class="lasthitMain">
+        <Panel id="lasthitPicker" class="Col">
+            <Label class="menu_button_label" text="last hit"/>
+
+            <Panel class="lasthitTopRow">
+                <Panel class="ColNoFill padding5">
+                    <Label text="Side"/>
+                    <Panel class="lasthitSideToggle">
+                        <Button id="lasthitSideRadiantBtn" class="lasthitSideBtn lasthitSideRadiantBtn lasthitSideActive" onactivate="selectSide(0)">
+                            <Label text="Radiant"/>
+                        </Button>
+                        <Button id="lasthitSideDireBtn" class="lasthitSideBtn lasthitSideDireBtn" onactivate="selectSide(1)">
+                            <Label text="Dire"/>
+                        </Button>
+                    </Panel>
+                    <ToggleButton checked="true" id="lasthitSniperToggle" class="customCheckbox" text="Enemy Sniper Bot"/>
+                </Panel>
+            </Panel>
+
+            <Panel class="RowNoFill lasthitSplit">
+                <Panel id="lasthitHeroCol" class="ColNoFill lasthitColLeft">
+                    <Label text="Hero"/>
+                    <Panel id="lasthitHeroGrid"/>
+                </Panel>
+
+                <Panel id="lasthitItemsCol" class="ColNoFill lasthitColRight">
+                    <Label text="Starting Items (600g cap)"/>
+                    <Panel class="RowNoFill">
+                        <Label class="settingLabel" text="Cost: "/>
+                        <Label id="lasthitItemsCost" class="settingLabel" text="0 / 600"/>
+                    </Panel>
+                    <Panel id="lasthitInventory"/>
+                    <Label class="settingLabel" text="Click an item to add it. Click a slot to clear it."/>
+                    <Panel id="lasthitItemsGrid"/>
+                </Panel>
+            </Panel>
+
+            <Panel class="RowNoFill">
+                <Button class="menu_button mode_play" id="menu_play" onactivate="startLasthit()">
+                    <Label class="mode_play_label" id="menu_play_label" text="Play"/>
+                </Button>
+                <Label id="errorMsg"/>
+            </Panel>
+        </Panel>
+
+        <Panel id="lasthitHud" class="lasthitHud Hidden">
+            <Label class="menu_button_label" text="Last Hit - Live"/>
+            <Panel class="RowNoFill">
+                <Label class="settingLabel" text="Good hits: "/>
+                <Label id="lasthitGood" class="settingLabel lasthitGoodValue" text="0"/>
+            </Panel>
+            <Panel class="RowNoFill">
+                <Label class="settingLabel" text="Bad hits: "/>
+                <Label id="lasthitBad" class="settingLabel lasthitBadValue" text="0"/>
+            </Panel>
+            <Panel class="RowNoFill">
+                <Label class="settingLabel" text="Avg delay: "/>
+                <Label id="lasthitAvg" class="settingLabel" text="0.00s"/>
+            </Panel>
+            <Panel class="RowNoFill">
+                <Button class="menu_button normal_button buttons" id="lasthitStop" onactivate="stopLasthit()">
+                    <Label text="Stop"/>
+                </Button>
+            </Panel>
+        </Panel>
+
+    </Panel>
+</root>

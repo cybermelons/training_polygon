@@ -1,7 +1,7 @@
 //$.Msg('snippet loaded')
 var menuContainer = $.GetContextPanel().GetParent();
 var competitive_mods=["aim_ez","aim_med","aim_hard","map_aim","aim_move"]
-var sandbox_mods=["dodge","timing","glimpse","armlet","invoker","other","lasthit","dreamcoil"]
+var sandbox_mods=["dodge","timing","lasthit"]
 var competitive_container=$('#compMenu')
 var sandbox_container=$('#sndbxMenu')
 // here we can collect favourites of user, popularity of gamemodes, their update date
