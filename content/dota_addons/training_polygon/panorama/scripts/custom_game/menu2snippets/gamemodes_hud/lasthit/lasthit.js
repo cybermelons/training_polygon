@@ -266,11 +266,22 @@ function applyLasthitPrefs(saved) {
     }
     if (saved.side !== undefined) { selectSide(saved.side); }
     if (saved.sniper !== undefined) { $('#lasthitSniperToggle').checked = (saved.sniper == 1); }
-    if (saved.items && saved.items.length !== undefined) {
-        // Rebuild inventory from saved item names. Costs come from the server.
+    if (saved.items) {
+        // Items round-trips JS array -> Lua table -> JSON -> ... and can come
+        // back as an object keyed by "1","2",... instead of an array. Normalize.
+        var itemList = [];
+        if (saved.items.length !== undefined) {
+            for (var i = 0; i < saved.items.length; i++) { itemList.push(saved.items[i]); }
+        } else {
+            // Object form: collect keys, sort numerically, read in order.
+            var keys = [];
+            for (var k in saved.items) { keys.push(k); }
+            keys.sort(function(a, b) { return parseInt(a) - parseInt(b); });
+            for (var i = 0; i < keys.length; i++) { itemList.push(saved.items[keys[i]]); }
+        }
         for (var s = 0; s < INVENTORY_SLOTS; s++) { inventory[s] = null; }
-        for (var i = 0; i < saved.items.length && i < INVENTORY_SLOTS; i++) {
-            var name = saved.items[i];
+        for (var i = 0; i < itemList.length && i < INVENTORY_SLOTS; i++) {
+            var name = itemList[i];
             inventory[i] = { name: name, cost: LASTHIT_ITEM_COSTS[name] || 0 };
         }
         renderInventory();
