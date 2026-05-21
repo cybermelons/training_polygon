@@ -10,31 +10,31 @@
         <Panel id="lasthitPicker" class="Col">
             <Label class="menu_button_label" text="last hit"/>
 
-            <Label text="Hero"/>
             <Panel class="RowNoFill">
-                <Panel id="heroPickerContainer" class="ColNoFill padding5">
-                    <Panel id="hero_picker" class="HeroPicker">
-                        <Button id="hero_icon_container" class="HeroPickerIconContainer">
-                            <DOTAHeroImage id="hero_picker_selected" class="heroPickerIcon" heroname="npc_dota_hero_antimage" heroimagestyle="icon"/>
-                        </Button>
-                        <Panel class="BadgeCircle"/>
-                    </Panel>
-                </Panel>
                 <Panel class="ColNoFill padding5">
                     <Label text="Side"/>
-                    <Panel class="RowNoFill">
-                        <RadioButton id="lasthitSideRadiant" class="customCheckbox" group="lasthitSide" text="Radiant" checked="true"/>
-                        <RadioButton id="lasthitSideDire" class="customCheckbox" group="lasthitSide" text="Dire"/>
+                    <Panel class="lasthitSideToggle">
+                        <Button id="lasthitSideRadiantBtn" class="lasthitSideBtn lasthitSideRadiantBtn lasthitSideActive" onactivate="selectSide(0)">
+                            <Label text="Radiant"/>
+                        </Button>
+                        <Button id="lasthitSideDireBtn" class="lasthitSideBtn lasthitSideDireBtn" onactivate="selectSide(1)">
+                            <Label text="Dire"/>
+                        </Button>
                     </Panel>
                     <ToggleButton checked="true" id="lasthitSniperToggle" class="customCheckbox" text="Enemy Sniper Bot"/>
                 </Panel>
             </Panel>
+
+            <Label text="Hero"/>
+            <Panel id="lasthitHeroGrid"/>
 
             <Label text="Starting Items (600g cap)"/>
             <Panel class="RowNoFill">
                 <Label class="settingLabel" text="Cost: "/>
                 <Label id="lasthitItemsCost" class="settingLabel" text="0 / 600"/>
             </Panel>
+            <Panel id="lasthitInventory" class="RowNoFill"/>
+            <Label class="settingLabel" text="Click to add to next free slot. Click a slot to clear it."/>
             <Panel id="lasthitItemsGrid" class="RowNoFill"/>
 
             <Panel class="RowNoFill">
@@ -66,8 +66,5 @@
             </Panel>
         </Panel>
 
-        <Panel id="lasthit_popup_container">
-            <Panel id="lasthit_hero_picker_popup" class="heroPickerPopup"/>
-        </Panel>
     </Panel>
 </root>

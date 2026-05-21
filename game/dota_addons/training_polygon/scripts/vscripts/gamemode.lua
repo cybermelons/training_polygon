@@ -4419,6 +4419,11 @@ function lasthit_end( eventSourceIndex, args )
   Timers:RemoveTimer("last_hit_waves")
   CustomGameEventManager:Send_ServerToAllClients("custom_training_ends",{})
   GameMode:ShowMenu()
+  -- Return the player to the lasthit picker (not the root play menu) so
+  -- they can immediately reconfigure and re-Start.
+  CustomGameEventManager:Send_ServerToAllClients("main_menu_load_page", {
+    page = "file://{resources}/layout/custom_game/menu2snippets/gamemodes_hud/lasthit/lasthit.xml"
+  })
 end
 --invoker_invoke_end euls_change_str manta_challenge_start
 --ss_scepter_toggle ss_training_end training_polygon_end change_skill_lvl invoker_procast_end ss_blink_toggle
