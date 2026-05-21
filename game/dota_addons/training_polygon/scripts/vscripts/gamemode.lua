@@ -95,6 +95,9 @@ function GameMode:OnFirstPlayerLoaded()
   TRAINING_PLACE=nil
   TEST_ID=1
   ebalai=nil
+  -- Begin warming the hero cache in the background while the user is in the
+  -- menu. Hover-triggered precaches in front of this still take priority.
+  precache:StartIdleDrip()
   DebugPrint("[BAREBONES] First Player has loaded")
   if GetMapName() == "dota" then
     TRAINING_PLACE=Vector(-2276.069336, 5846.962891, 256.000000)

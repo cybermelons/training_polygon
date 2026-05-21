@@ -207,6 +207,8 @@ function saveHeroList(data) {
         heroButton.SetPanelEvent('onmouseover', (function(b, n) {
             return function() {
                 $.DispatchEvent('DOTAShowTextTooltip', b, prettifyHeroName(n));
+                // Warm the hero precache silently while the user is hovering.
+                GameEvents.SendCustomGameEventToServer('precache_hero_hover', { hero: n });
             };
         })(heroButton, heroName));
         heroButton.SetPanelEvent('onmouseout', (function(b) {
