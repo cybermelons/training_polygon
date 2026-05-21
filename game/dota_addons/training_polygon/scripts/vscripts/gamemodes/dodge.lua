@@ -1819,6 +1819,7 @@ function dodge:StartGame(args)
 end
 
 function dodge:cycleEnemies()
+    print(string.format("[dodge] cycleEnemies spellIndex=%d of %d", self.spellIndex or 0, #self.selectedSpells))
     if self.deactivateCalled==true then
         self:Deactivate()
     end
@@ -1855,22 +1856,36 @@ function dodge:cycleEnemies()
     self.firstCycle=false
 end
 function dodge:checkResult()
-    
-    if self.playerGotHurt then
-        --bad result
-        if self.dodgePressed then
-            local delay=self.playerDodgeTime-self.playerHurtTime
-            delay=math.floor(delay*1000)/1000
-            Notifications:Show('red','bad, delay:'..delay,self.currentAbilityName)
+    local hurt = self.playerGotHurt
+    if not self.dodgePressed then
+        if hurt then
+            Notifications:Show('red','no dodge', self.currentAbilityName)
         else
-            Notifications:Show('red','bad',self.currentAbilityName)
+            -- Damage never landed AND no dodge pressed: spell just missed.
+            Notifications:Show('green','good', self.currentAbilityName)
         end
     else
-        --good result
-        Notifications:Show('green','good',self.currentAbilityName)
+        -- Negative delay = pressed before impact. Positive = pressed too late.
+        local delay = self.playerDodgeTime - self.playerHurtTime
+        local rounded = math.floor(delay*1000)/1000
+        local cp = self.dodgeCastPoint or 0
+        if not hurt then
+            Notifications:Show('green','good '..rounded..'s', self.currentAbilityName)
+        elseif delay < -cp then
+            -- Pressed early enough to cover the castpoint window but still got
+            -- hit -- means the dodge ability couldn't catch this specific spell.
+            Notifications:Show('yellow','close '..rounded..'s', self.currentAbilityName)
+        elseif delay < 0 then
+            -- Pressed before impact but inside the castpoint -- dodge wasn't
+            -- active in time.
+            Notifications:Show('yellow','just late '..rounded..'s', self.currentAbilityName)
+        else
+            -- Damage already landed when dodge was pressed.
+            Notifications:Show('red','late '..rounded..'s', self.currentAbilityName)
+        end
     end
-    self.playerGotHurt=false
-    self.dodgePressed=false
+    self.playerGotHurt = false
+    self.dodgePressed = false
 end
 function dodge:SendSpellTable()
     --[[ print(self.spellTable)
@@ -1968,16 +1983,25 @@ function dodge:ModifierGained(event)
 
     end
     if string_in_array(event.name_const,self.hurtModifiers) then
-        event.duration=0.2
-        if self.currentDodgeType~="monkey_king_mischief" then
-            if self.playerGotHurt==false then
-                self.playerGotHurt=true
-                print('player hurt by stun')
-                self.playerHurtTime=Time()
-                Timebar:BlueLine()
+        -- Only react when the modifier was applied to the PLAYER. Without this
+        -- filter, abilities that reflect/redirect stuns (e.g. Spiked Carapace)
+        -- trigger playerGotHurt because the *enemy* receives modifier_stunned,
+        -- and the player gets graded as "bad" despite a perfect dodge.
+        local parent = nil
+        if event.entindex_parent_const then
+            parent = EntIndexToHScript(event.entindex_parent_const)
+        end
+        if parent == self.playerHero then
+            event.duration=0.2
+            if self.currentDodgeType~="monkey_king_mischief" then
+                if self.playerGotHurt==false then
+                    self.playerGotHurt=true
+                    print('player hurt by stun')
+                    self.playerHurtTime=Time()
+                    Timebar:BlueLine()
+                end
             end
         end
-        --[[ DeepPrintDota(event) ]]
         return true
     end
     if event.name_const=="modifier_monkey_king_transform" then
@@ -2060,7 +2084,11 @@ function dodge:Deactivate()
     self.deactivateCalled=false
     self.playerHero:SetDayTimeVisionRange(2000)
     Timebar:Hide()
-    CustomGameEventManager:Send_ServerToAllClients("show_main_menu",{})
+    GameMode:ShowMenu()
+    -- Return the player to the dodge picker (not the root play menu).
+    CustomGameEventManager:Send_ServerToAllClients("main_menu_load_page", {
+        page = "file://{resources}/layout/custom_game/menu2snippets/gamemodes_hud/dodge/dodge.xml"
+    })
     GridNav:RegrowAllTrees()
     --[[ self.currentEnemy:RemoveSelf() ]] --do not do this, if we remove unit in middle of a cast, game would crash
 end
