@@ -168,7 +168,8 @@ function dodge:Init()
     self.mantaEnt=nil
     self.dodgeAbilityEnt=nil
     self.dodgeModifier=""
-    self.playerGotHurt=false
+    self.playerGotHurt=false        -- damage landed on player
+    self.playerStatusTaken=false    -- hurt-modifier (stun/fear/etc) applied to player
     self.playerHurtTime=0
     self.playerDodgeTime=0
     self.yashaKaya=false
@@ -1812,6 +1813,7 @@ function dodge:StartGame(args)
     self.dodgePressed=false
     self.playerDodgeTime=0
     self.playerGotHurt=false
+    self.playerStatusTaken=false
     self.timebarTiming=self.dodgeWindowTime[self.currentDodgeType]
     self.dodgeCastPoint=self.dodgeCastPointTable[self.currentDodgeType]
     if self.yashaKayaPlayer then
@@ -1874,21 +1876,23 @@ function dodge:cycleEnemies()
     self.firstCycle=false
 end
 function dodge:checkResult()
-    local hurt = self.playerGotHurt
+    local hurt = self.playerGotHurt              -- true if damage landed
+    local statusOnly = self.playerStatusTaken    -- true if a debuff applied
+    local statusSuffix = (statusOnly and not hurt) and ' (took status)' or ''
     if not self.dodgePressed then
         if hurt then
-            Notifications:Show('red','no dodge', self.currentAbilityName)
+            Notifications:Show('red','no dodge'..statusSuffix, self.currentAbilityName)
         else
             -- Damage never landed AND no dodge pressed: spell just missed.
-            Notifications:Show('green','good', self.currentAbilityName)
+            Notifications:Show('green','good'..statusSuffix, self.currentAbilityName)
         end
     elseif self.spellImpactTime == nil then
         -- Bespoke spell handler didn't set impact time, can't compute timing.
         -- Fall back to a simple grade.
         if hurt then
-            Notifications:Show('red','bad', self.currentAbilityName)
+            Notifications:Show('red','bad'..statusSuffix, self.currentAbilityName)
         else
-            Notifications:Show('green','good', self.currentAbilityName)
+            Notifications:Show('green','good'..statusSuffix, self.currentAbilityName)
         end
     else
         -- "Good window" = the press-time interval where the dodge modifier will
@@ -1908,18 +1912,24 @@ function dodge:checkResult()
         local windowDelta = self.playerDodgeTime - earliestSafePress
         local rounded = math.floor(windowDelta*1000)/1000
         if not hurt then
-            Notifications:Show('green','good +'..rounded..'s into '..windowLen..'s window', self.currentAbilityName)
+            Notifications:Show('green','good +'..rounded..'s into '..windowLen..'s window'..statusSuffix, self.currentAbilityName)
         elseif windowDelta < 0 then
-            -- Pressed too early: dodge faded before impact.
+            -- Pressed BEFORE the window: dodge faded before impact landed.
             Notifications:Show('yellow','early '..rounded..'s (before window)', self.currentAbilityName)
+        elseif windowDelta <= windowLen then
+            -- Pressed INSIDE the window but got hit anyway. The dodge ability
+            -- doesn't catch this damage type (e.g. Carapace vs magic, Manta
+            -- vs cleave) or modifier-application timing didn't quite line up.
+            Notifications:Show('yellow','in window but hit ('..rounded..'s in)', self.currentAbilityName)
         else
-            -- Pressed past the latest safe moment: damage landed.
+            -- Pressed PAST the deadline: damage landed first.
             local late = self.playerDodgeTime - latestSafePress
             local lateRounded = math.floor(late*1000)/1000
-            Notifications:Show('red','late +'..lateRounded..'s past deadline', self.currentAbilityName)
+            Notifications:Show('red','late '..lateRounded..'s past deadline', self.currentAbilityName)
         end
     end
     self.playerGotHurt = false
+    self.playerStatusTaken = false
     self.dodgePressed = false
     -- Clear so the next spell's bespoke handler (if any) doesn't inherit it.
     self.spellImpactTime = nil
@@ -2031,10 +2041,16 @@ function dodge:ModifierGained(event)
         if parent == self.playerHero then
             event.duration=0.2
             if self.currentDodgeType~="monkey_king_mischief" then
-                if self.playerGotHurt==false then
-                    self.playerGotHurt=true
-                    print('player hurt by stun')
-                    self.playerHurtTime=Time()
+                -- Status modifiers (stun, fear, etc.) are tracked separately from
+                -- damage. Spiked Carapace blocks damage but the stun modifier
+                -- may still land; we don't want that to make the dodge graded
+                -- as "bad" since the player avoided the meaningful outcome.
+                if self.playerStatusTaken==false then
+                    self.playerStatusTaken=true
+                    if self.playerHurtTime==0 then
+                        self.playerHurtTime=Time()
+                    end
+                    print('player took status (modifier_'..tostring(event.name_const)..')')
                     Timebar:BlueLine()
                 end
             end

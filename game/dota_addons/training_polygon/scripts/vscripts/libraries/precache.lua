@@ -4,10 +4,32 @@ if precache == nil then
     precache = class({})
 end
 
+-- markDone fires once the engine finishes loading 'name'. Sets cached, clears
+-- queued, and fires any registered waiters (gamemode doPrecache calls that
+-- raced with a hover/drip on the same unit).
+local function makeMarkDone(name)
+    return function()
+        precache.cached[name] = true
+        precache.queued[name] = nil
+        local waiters = precache.waiters[name]
+        if waiters then
+            precache.waiters[name] = nil
+            for _, w in ipairs(waiters) do w() end
+        end
+    end
+end
+
+local function kickOff(name, playerID)
+    if precache.cached[name] or precache.queued[name] then return end
+    precache.queued[name] = true
+    PrecacheUnitByNameAsync(name, makeMarkDone(name), playerID or -1)
+end
+
 function precache:Init()
     self.precacheTable = {}
     self.cached = {}          -- name -> true once async callback fires
     self.queued = {}          -- name -> true once added (in-flight)
+    self.waiters = {}         -- name -> list of fn(): fires when load finishes
     self.dripStarted = false
 
     -- Hover-triggered hero precache. Client fires this from the hero picker
@@ -16,50 +38,31 @@ function precache:Init()
         local name = args and args.hero
         if not name then return end
         if precache.cached[name] or precache.queued[name] then return end
-        precache.queued[name] = true
         print("[Precache] hover precache: "..name)
-        PrecacheUnitByNameAsync(name, function()
-            precache.cached[name] = true
-            precache.queued[name] = nil
-        end)
+        kickOff(name, 0)
     end)
 end
 
 function precache:PrecaheAddItemToList(itemList)
     for k,v in pairs(itemList) do
-        -- Only skip when fully cached. If the hero is mid-flight from a hover
-        -- precache, we still need to wait on the gamemode's doPrecache before
-        -- spawning the unit -- so add it to the table and let the engine dedupe
-        -- the actual asset load.
         if not self.cached[v] then
             table.insert(self.precacheTable, {'item', v})
-            print(v.." added to table")
         end
     end
 end
 
 function precache:PrecacheAddUnitToList(unitList)
     for k,v in pairs(unitList) do
-        -- Only skip when fully cached. If the hero is mid-flight from a hover
-        -- precache, we still need to wait on the gamemode's doPrecache before
-        -- spawning the unit -- so add it to the table and let the engine dedupe
-        -- the actual asset load.
         if not self.cached[v] then
             table.insert(self.precacheTable, {'unit', v})
-            print(v.." added to table")
         end
     end
 end
 
 function precache:PrecacheAddPlayerUnitToList(unitList)
     for k,v in pairs(unitList) do
-        -- Only skip when fully cached. If the hero is mid-flight from a hover
-        -- precache, we still need to wait on the gamemode's doPrecache before
-        -- spawning the unit -- so add it to the table and let the engine dedupe
-        -- the actual asset load.
         if not self.cached[v] then
             table.insert(self.precacheTable, {'p_unit', v})
-            print(v.." added to table")
         end
     end
 end
@@ -68,11 +71,9 @@ function precache:doPrecache(callback)
     local totalCount = #self.precacheTable
 
     -- Always hide the main menu before gameplay begins, regardless of whether
-    -- we show the precache modal. The modal visibility is independent of the
-    -- main-menu visibility.
+    -- we show the precache modal.
     GameMode:HideMenu()
 
-    -- Nothing new to load: skip the modal entirely and go straight to callback.
     if totalCount == 0 then
         print("Precache: nothing to precache (all cached)")
         if callback then callback() end
@@ -80,49 +81,63 @@ function precache:doPrecache(callback)
     end
 
     print('Precache started ('..totalCount..' items)')
-    -- Only flash the modal when there's enough work to be noticeable.
     local showModal = totalCount > 1
     if showModal then
         CustomGameEventManager:Send_ServerToAllClients("precache_start", {total = totalCount})
     end
 
     local currentCount = 0
-    function precacheElement(callback)
-        if self.precacheTable[1] ~= nil then
-            local itemType = self.precacheTable[1][1]
-            local itemName = self.precacheTable[1][2]
-
-            currentCount = currentCount + 1
-            print("Precaching:", itemType, itemName, "(" .. currentCount .. "/" .. totalCount .. ")")
-
-            if showModal then
-                CustomGameEventManager:Send_ServerToAllClients("precache_progress", {
-                    item = itemName,
-                    current = currentCount,
-                    total = totalCount
-                })
-            end
-
-            local markDone = function()
-                self.cached[itemName] = true
-                self.queued[itemName] = nil
-                table.remove(self.precacheTable, 1)
-                precacheElement(callback)
-            end
-
-            if itemType == "unit" then
-                PrecacheUnitByNameAsync(itemName, markDone)
-            elseif itemType == "p_unit" then
-                PrecacheUnitByNameAsync(itemName, markDone, 0)
-            else
-                PrecacheItemByNameAsync(itemName, markDone)
-            end
-        else
+    function precacheElement(cb)
+        if self.precacheTable[1] == nil then
             print("Precache done")
             if showModal then
                 CustomGameEventManager:Send_ServerToAllClients("precache_complete", {})
             end
-            if callback then callback() end
+            if cb then cb() end
+            return
+        end
+
+        local itemType = self.precacheTable[1][1]
+        local itemName = self.precacheTable[1][2]
+
+        currentCount = currentCount + 1
+        print("Precaching:", itemType, itemName, "(" .. currentCount .. "/" .. totalCount .. ")")
+        if showModal then
+            CustomGameEventManager:Send_ServerToAllClients("precache_progress", {
+                item = itemName,
+                current = currentCount,
+                total = totalCount
+            })
+        end
+
+        local advance = function()
+            table.remove(self.precacheTable, 1)
+            precacheElement(cb)
+        end
+
+        if self.cached[itemName] then
+            -- Already loaded (probably by an earlier gamemode). Skip immediately.
+            advance()
+        elseif self.queued[itemName] then
+            -- In-flight from hover or drip. Register a waiter that fires
+            -- when the original async completes, then advance.
+            self.waiters[itemName] = self.waiters[itemName] or {}
+            table.insert(self.waiters[itemName], advance)
+        else
+            -- Fresh load. Kick off the async; markDone-style callback fires
+            -- both cached/queued bookkeeping AND any registered waiters.
+            self.queued[itemName] = true
+            local cbForThis = function()
+                makeMarkDone(itemName)()
+                advance()
+            end
+            if itemType == "unit" then
+                PrecacheUnitByNameAsync(itemName, cbForThis, -1)
+            elseif itemType == "p_unit" then
+                PrecacheUnitByNameAsync(itemName, cbForThis, 0)
+            else
+                PrecacheItemByNameAsync(itemName, cbForThis)
+            end
         end
     end
 
@@ -149,13 +164,7 @@ function precache:StartIdleDrip()
         end
         local name = heroes[i]
         i = i + 1
-        if not self.cached[name] and not self.queued[name] then
-            self.queued[name] = true
-            PrecacheUnitByNameAsync(name, function()
-                self.cached[name] = true
-                self.queued[name] = nil
-            end)
-        end
+        kickOff(name, 0)
         return 0.5
     end)
 end
