@@ -128,6 +128,9 @@ function drawItemsGrid() {
         btn.SetPanelEvent('onactivate', (function(n, c) {
             return function() { addItem(n, c); };
         })(itemName, cost));
+        btn.SetPanelEvent('oncontextmenu', (function(n, c) {
+            return function() { addItem(n, c); };
+        })(itemName, cost));
 
         btn.SetPanelEvent('onmouseover', (function(b, n) {
             return function() { $.DispatchEvent('DOTAShowAbilityTooltip', b, n); };

@@ -4325,26 +4325,26 @@ function lasthit_start_fix( eventSourceIndex, args )
   player_side=0
   local hero_respawn
   local enemy_side
+  -- Spawn positions are mirrored across the lane midpoint (lh_middle_point).
+  -- Radiant: closer to the radiant tower at south-west end of the practice lane.
+  -- Dire:    closer to the dire tower at north-east end.
+  local radiant_hero_spawn = Vector(-2717.9250488281, -1176.9210205078, 128)
+  local dire_hero_spawn    = Vector(1721.0, 584.0, 128)
   if side==0 then
-    --hero_respawn=Vector(-3968.054443, -3462.106689, 264.750000)
-    hero_respawn=Vector(-930.81896972656,157.91223144531,128)
+    hero_respawn=radiant_hero_spawn
     player_side=DOTA_TEAM_GOODGUYS
     enemy_side=DOTA_TEAM_BADGUYS
-    --radiant
   else
+    hero_respawn=dire_hero_spawn
     player_side=DOTA_TEAM_BADGUYS
     enemy_side=DOTA_TEAM_GOODGUYS
-    --hero_respawn=Vector(3450.819824, 2937.588135, 264.000000)
-    hero_respawn=Vector(-930.81896972656,157.91223144531,128)
-    --dire
   end
   local player=PlayerResource:GetPlayer(args.PlayerID)
   print("PLAYER ID:", args.PlayerID)
   local old_hero=player:GetAssignedHero()
   PlayerResource:SetCustomTeamAssignment(args.PlayerID,player_side)
   active_hero=replaceHero(old_hero,hero)
-  --active_hero:SetAbsOrigin(hero_respawn)
-  active_hero:SetAbsOrigin(Vector(-2717.9250488281,-1176.9210205078,128))
+  active_hero:SetAbsOrigin(hero_respawn)
   active_hero:SetMoveCapability(1)
   if active_hero:GetUnitName()=="npc_dota_hero_morphling" then
     local ability1=active_hero:FindAbilityByName("morphling_morph_agi")
@@ -4399,12 +4399,18 @@ function lasthit_start_fix( eventSourceIndex, args )
       end
     })
   LASTHIT_MIN_DMG=active_hero:GetBaseDamageMin()
-  --sniper enemy
+  --sniper enemy: spawn on the team OPPOSITE the player, near their tower
   if args['sniper']==1 then
-    sniper=CreateUnitByName("npc_dota_hero_sniper",lh_dire_tower_spawn+Vector(200,0,0) , true, nil, nil, DOTA_TEAM_BADGUYS)
+    local sniper_spawn
+    if side==0 then
+      -- player is Radiant; sniper on Dire near dire tower
+      sniper_spawn = lh_dire_tower_spawn + Vector(200,0,0)
+    else
+      -- player is Dire; sniper on Radiant near radiant tower
+      sniper_spawn = lh_radiant_tower_spawn + Vector(-200,0,0)
+    end
+    sniper=CreateUnitByName("npc_dota_hero_sniper", sniper_spawn, true, nil, nil, enemy_side)
     activateShiperAI(sniper)
-    --sniperAIv2(sniper)
-    --naiSniper(sniper)
     sniper:SetControllableByPlayer(active_hero:GetPlayerID(),false)
   end
 end
