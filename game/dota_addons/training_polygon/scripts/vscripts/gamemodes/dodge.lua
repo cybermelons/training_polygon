@@ -2088,16 +2088,10 @@ end
 function dodge:PrepareDeactivate()
     self.deactivateCalled=true
     CustomGameEventManager:Send_ServerToAllClients("clear_hud",{})
-    -- Safety net: Deactivate normally runs from the next cycleEnemies tick,
-    -- but if the spell loop has stalled (which happens) then Stop would do
-    -- nothing. Force-run Deactivate after a short delay if it hasn't run yet.
-    Timers:CreateTimer(2.0, function()
-        if self.deactivateCalled then
-            print('[dodge] PrepareDeactivate safety timer firing Deactivate')
-            self:Deactivate()
-        end
-        return nil
-    end)
+    -- Run Deactivate immediately. The next cycleEnemies (if any timer is
+    -- still pending from the in-flight cast) will early-out on self.activated
+    -- being false. The watchdog also no-ops on self.activated=false.
+    self:Deactivate()
 end
 
 function dodge:Deactivate()
