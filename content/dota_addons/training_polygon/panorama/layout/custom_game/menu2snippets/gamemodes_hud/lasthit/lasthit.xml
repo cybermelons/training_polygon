@@ -25,8 +25,8 @@
                 </Panel>
             </Panel>
 
-            <Panel class="lasthitSplit">
-                <Panel id="lasthitItemsCol" class="lasthitColLeft">
+            <Panel class="RowNoFill lasthitSplit">
+                <Panel id="lasthitItemsCol" class="ColNoFill lasthitColLeft">
                     <Label text="Starting Items (600g cap)"/>
                     <Panel class="RowNoFill">
                         <Label class="settingLabel" text="Cost: "/>
@@ -37,7 +37,7 @@
                     <Panel id="lasthitItemsGrid"/>
                 </Panel>
 
-                <Panel id="lasthitHeroCol" class="lasthitColRight">
+                <Panel id="lasthitHeroCol" class="ColNoFill lasthitColRight">
                     <Label text="Hero"/>
                     <Panel id="lasthitHeroGrid"/>
                 </Panel>
