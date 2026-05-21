@@ -1819,13 +1819,25 @@ function dodge:StartGame(args)
 end
 
 function dodge:cycleEnemies()
-    print(string.format("[dodge] cycleEnemies spellIndex=%d of %d", self.spellIndex or 0, #self.selectedSpells))
+    self.cycleTick = (self.cycleTick or 0) + 1
+    print(string.format("[dodge] cycleEnemies tick=%d spellIndex=%d of %d", self.cycleTick, self.spellIndex or 0, #self.selectedSpells))
     if self.deactivateCalled==true then
         self:Deactivate()
     end
     if self.activated==false then
         return
     end
+    -- Watchdog: if no other cycleEnemies has fired in 15s (because a spell
+    -- handler failed to schedule), restart the loop. Each new cycleEnemies
+    -- bumps cycleTick so older watchdogs become no-ops.
+    local watchdogFor = self.cycleTick
+    Timers:CreateTimer(15.0, function()
+        if self.activated and not self.deactivateCalled and self.cycleTick == watchdogFor then
+            print('[dodge] watchdog re-firing cycleEnemies (loop stalled at tick '..watchdogFor..')')
+            self:cycleEnemies()
+        end
+        return nil
+    end)
     if self.firstCycle==false then
         self:checkResult()
     end
@@ -2076,6 +2088,16 @@ end
 function dodge:PrepareDeactivate()
     self.deactivateCalled=true
     CustomGameEventManager:Send_ServerToAllClients("clear_hud",{})
+    -- Safety net: Deactivate normally runs from the next cycleEnemies tick,
+    -- but if the spell loop has stalled (which happens) then Stop would do
+    -- nothing. Force-run Deactivate after a short delay if it hasn't run yet.
+    Timers:CreateTimer(2.0, function()
+        if self.deactivateCalled then
+            print('[dodge] PrepareDeactivate safety timer firing Deactivate')
+            self:Deactivate()
+        end
+        return nil
+    end)
 end
 
 function dodge:Deactivate()
