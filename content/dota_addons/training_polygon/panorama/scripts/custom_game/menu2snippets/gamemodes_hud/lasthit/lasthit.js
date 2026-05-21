@@ -2,20 +2,38 @@ $.Msg('lasthit loaded')
 
 // Items list: [name, cost]. Cost matches Dota's item KV so we can sum client-side.
 // Lua validates total<=600 in lasthit_start_fix; we mirror that here.
-var LASTHIT_ITEMS = [
-    ["item_quelling_blade",     200],
-    ["item_stout_shield",       250],
-    ["item_blades_of_attack",   450],
-    ["item_gauntlets",           60],
-    ["item_slippers",            60],
-    ["item_branches",            45],
-    ["item_tango",              125],
-    ["item_flask",              110],
-    ["item_faerie_fire",         85],
-    ["item_ring_of_protection", 175],
-    ["item_circlet",            155],
-    ["item_mantle",             140]
+// Items from Dota 2's "Strategy" shop tab. Costs are pulled from the game's
+// own GetItemCost() at runtime so we never drift from in-game values.
+var LASTHIT_ITEM_NAMES = [
+    // Consumables
+    "item_tango",
+    "item_flask",
+    "item_clarity",
+    "item_enchanted_mango",
+    "item_faerie_fire",
+    "item_branches",
+    // Attributes
+    "item_gauntlets",
+    "item_slippers",
+    "item_mantle",
+    "item_circlet",
+    "item_belt_of_strength",
+    "item_boots_of_elves",
+    "item_robe",
+    "item_crown",
+    // Weapons / defense
+    "item_quelling_blade",
+    "item_stout_shield",
+    "item_blades_of_attack",
+    "item_blight_stone",
+    "item_orb_of_venom",
+    "item_ring_of_protection",
+    "item_ring_of_regen",
+    "item_sobi_mask",
+    "item_wind_lace"
 ];
+// Populated from the server's item_costs_answer event.
+var LASTHIT_ITEM_COSTS = {};
 var ITEM_COST_CAP = 600;
 var INVENTORY_SLOTS = 6;
 // inventory[i] = {name, cost} or null. Dupes allowed.
@@ -97,19 +115,15 @@ function clearSlot(idx) {
 
 function drawItemsGrid() {
     var grid = $('#lasthitItemsGrid');
-    for (var i = 0; i < LASTHIT_ITEMS.length; i++) {
-        var itemName = LASTHIT_ITEMS[i][0];
-        var cost = LASTHIT_ITEMS[i][1];
+    for (var i = 0; i < LASTHIT_ITEM_NAMES.length; i++) {
+        var itemName = LASTHIT_ITEM_NAMES[i];
+        var cost = LASTHIT_ITEM_COSTS[itemName] || 0;
         var btn = $.CreatePanel('Button', grid, 'btn_' + itemName);
         btn.AddClass('lasthitItemButton');
 
         var img = $.CreatePanel('DOTAItemImage', btn, 'img_' + itemName);
         img.itemname = itemName;
         img.AddClass('lasthitItemImage');
-
-        var costLbl = $.CreatePanel('Label', btn, 'cost_' + itemName);
-        costLbl.text = cost + 'g';
-        costLbl.AddClass('lasthitItemCostLabel');
 
         btn.SetPanelEvent('onactivate', (function(n, c) {
             return function() { addItem(n, c); };
@@ -240,7 +254,64 @@ function refreshLasthitValues(data) {
 
 GameEvents.Subscribe('refresh_lasthit_values', refreshLasthitValues);
 
+// --- Saved prefs ---
+function applyLasthitPrefs(saved) {
+    if (!saved) { return; }
+    if (saved.hero) {
+        var prev = $('#' + selectedHero);
+        if (prev) { prev.RemoveClass('lasthitHeroSelected'); }
+        selectedHero = saved.hero;
+        var next = $('#' + selectedHero);
+        if (next) { next.AddClass('lasthitHeroSelected'); }
+    }
+    if (saved.side !== undefined) { selectSide(saved.side); }
+    if (saved.sniper !== undefined) { $('#lasthitSniperToggle').checked = (saved.sniper == 1); }
+    if (saved.items && saved.items.length !== undefined) {
+        // Rebuild inventory from saved item names. Costs come from the server.
+        for (var s = 0; s < INVENTORY_SLOTS; s++) { inventory[s] = null; }
+        for (var i = 0; i < saved.items.length && i < INVENTORY_SLOTS; i++) {
+            var name = saved.items[i];
+            inventory[i] = { name: name, cost: LASTHIT_ITEM_COSTS[name] || 0 };
+        }
+        renderInventory();
+        updateCostLabel();
+    }
+}
+
+function onPrefsAnswer(data) {
+    if (data && data.data && data.data.lasthit) {
+        applyLasthitPrefs(data.data.lasthit);
+    }
+}
+GameEvents.Subscribe('prefs_answer', onPrefsAnswer);
+
+function onItemCostsAnswer(data) {
+    if (!data || !data.costs) { return; }
+    LASTHIT_ITEM_COSTS = data.costs;
+    // Drop any item the engine doesn't recognize (cost <= 0 means the name is
+    // wrong or the item was removed in a patch). Don't show them in the picker.
+    LASTHIT_ITEM_NAMES = LASTHIT_ITEM_NAMES.filter(function(n) {
+        return (LASTHIT_ITEM_COSTS[n] || 0) > 0;
+    });
+    $('#lasthitItemsGrid').RemoveAndDeleteChildren();
+    drawItemsGrid();
+    // Fix inventory cost totals if prefs already loaded items with cost=0.
+    for (var s = 0; s < INVENTORY_SLOTS; s++) {
+        if (inventory[s]) {
+            inventory[s].cost = LASTHIT_ITEM_COSTS[inventory[s].name] || 0;
+        }
+    }
+    updateCostLabel();
+}
+GameEvents.Subscribe('item_costs_answer', onItemCostsAnswer);
+
 $('#lasthitSniperToggle').checked = true;
 renderInventory();
-drawItemsGrid();
 updateCostLabel();
+// Picker grid renders only after authoritative costs return from the server.
+GameEvents.SendCustomGameEventToServer('get_item_costs', { items: LASTHIT_ITEM_NAMES });
+
+// Request saved prefs. The hero picker is async (waits for hero list), so
+// applyLasthitPrefs may run before the picker buttons exist; in that case the
+// selection class is reapplied when saveHeroList finishes.
+GameEvents.SendCustomGameEventToServer('prefs_get', {});

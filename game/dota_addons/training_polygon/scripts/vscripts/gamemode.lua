@@ -57,6 +57,7 @@ require('libraries/precache')
 require('libraries/timebar')
 require('libraries/notifications')
 require('libraries/place_picker')
+require('libraries/prefs')
 require('utils')
 
 ping_reader:Init()
@@ -4286,6 +4287,18 @@ function lasthit_start( eventSourceIndex, args )
 
 end
 function lasthit_start_fix( eventSourceIndex, args )
+  -- Persist picker state so the UI can restore it next session. Wrapped in
+  -- pcall: prefs failures must NEVER block the actual trainer from spawning.
+  pcall(function()
+    Prefs:Set("lasthit", {
+        hero = args['hero'],
+        side = args['side'],
+        sniper = args['sniper'],
+        items = args['items'],
+    })
+    Prefs:Set("last_mode", "lasthit")
+  end)
+
   --middle point Vector(-498.22644042969,-296.97790527344,128)
   lh_middle_point=Vector(-498.22644042969,-296.97790527344,128)
   lh_dire_tower_spawn=lh_middle_point+Vector(1,1,0)*1000
