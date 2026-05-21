@@ -2100,6 +2100,13 @@ function dodge:Deactivate()
     self.deactivateCalled=false
     self.playerHero:SetDayTimeVisionRange(2000)
     Timebar:Hide()
+    -- Kill the in-flight enemy bot so the cast it was about to fire never
+    -- happens. The bot's SetContextThink is bound to the entity, so removing
+    -- the entity cancels it implicitly.
+    if self.currentEnemy ~= nil and IsValidEntity(self.currentEnemy) then
+        self.currentEnemy:RemoveSelf()
+        self.currentEnemy = nil
+    end
     GameMode:ShowMenu()
     -- Return the player to the dodge picker (not the root play menu).
     CustomGameEventManager:Send_ServerToAllClients("main_menu_load_page", {
